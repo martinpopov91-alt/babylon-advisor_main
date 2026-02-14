@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Plus, MoreVertical, Trash2, Pencil, Wallet } from 'lucide-react';
+import { Plus, Trash2, Pencil, Wallet } from 'lucide-react';
 import { Account, BudgetItem, TransactionType } from '../types.ts';
 import { ACCOUNT_ICONS } from '../constants.ts';
 
@@ -12,34 +12,37 @@ interface AccountsViewProps {
   onDeleteAccount: (id: string) => void;
 }
 
-export const AccountsView: React.FC<AccountsViewProps> = ({ 
-  accounts, 
-  items, 
-  symbol, 
-  onAddAccount, 
-  onEditAccount, 
-  onDeleteAccount 
+export const AccountsView: React.FC<AccountsViewProps> = ({
+  accounts,
+  items,
+  symbol,
+  onAddAccount,
+  onEditAccount,
+  onDeleteAccount
 }) => {
-  
+
   const calculateBalance = (account: Account) => {
     // 1. Start with initial
     let balance = account.initialBalance;
 
     // 2. Add/Subtract based on transactions linked to this account
-    // Note: We scan ALL items, not just filtered ones, to get true balance. 
-    // However, in this app 'items' is usually the state from App.tsx which contains all transactions.
-    // If 'items' passed here is filtered by date, the balance might be wrong. 
-    // Ideally, App.tsx should pass allItems. Assuming 'items' here refers to the master list or we accept it's a "Period Balance" if filtered.
-    // For a proper account view, typically you want ALL transactions. 
-    // Let's assume for now 'items' contains all history (since App.tsx loads all from localstorage).
-    
     items.forEach(item => {
+      // Handle Normal Account ID match
       if (item.accountId === account.id) {
         if (item.type === TransactionType.INCOME) {
           balance += item.actualAmount;
+        } else if (item.type === TransactionType.TRANSFER) {
+          // If we are the source of transfer, subtract
+          balance -= item.actualAmount;
         } else {
           balance -= item.actualAmount;
         }
+      }
+
+      // Handle Transfer Destination
+      if (item.toAccountId === account.id && item.type === TransactionType.TRANSFER) {
+        // If we are the destination of transfer, add
+        balance += item.actualAmount;
       }
     });
 
@@ -57,18 +60,18 @@ export const AccountsView: React.FC<AccountsViewProps> = ({
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300 pb-20">
-      
+
       {/* Net Worth Header */}
       <div className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-8 rounded-3xl shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 dark:bg-slate-900/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"></div>
-        
+
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
             <p className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest text-xs mb-2">Total Net Worth</p>
             <h2 className="text-4xl font-bold">{symbol}{totalNetWorth.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
             <p className="text-slate-400 dark:text-slate-500 text-sm mt-2 font-medium">Across {accounts.length} accounts</p>
           </div>
-          <button 
+          <button
             onClick={onAddAccount}
             className="flex items-center gap-2 bg-white/10 dark:bg-slate-900/10 hover:bg-white/20 dark:hover:bg-slate-900/20 px-5 py-3 rounded-xl font-bold transition-all backdrop-blur-sm"
           >
@@ -86,20 +89,20 @@ export const AccountsView: React.FC<AccountsViewProps> = ({
           return (
             <div key={account.id} className="group relative bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
               <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                 <button 
-                   onClick={() => onEditAccount(account)}
-                   className="p-2 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
-                 >
-                   <Pencil size={16} />
-                 </button>
-                 {!account.isDefault && (
-                    <button 
-                      onClick={() => onDeleteAccount(account.id)}
-                      className="p-2 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-rose-600 rounded-lg transition-colors"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                 )}
+                <button
+                  onClick={() => onEditAccount(account)}
+                  className="p-2 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 rounded-lg transition-colors"
+                >
+                  <Pencil size={16} />
+                </button>
+                {!account.isDefault && (
+                  <button
+                    onClick={() => onDeleteAccount(account.id)}
+                    className="p-2 bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-rose-600 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                )}
               </div>
 
               <div className="flex items-start justify-between mb-8">
@@ -107,7 +110,7 @@ export const AccountsView: React.FC<AccountsViewProps> = ({
                   <Icon size={24} />
                 </div>
                 <div className="text-right">
-                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{account.type.replace('_', ' ')}</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{account.type.replace('_', ' ')}</p>
                 </div>
               </div>
 
@@ -125,7 +128,7 @@ export const AccountsView: React.FC<AccountsViewProps> = ({
         })}
 
         {/* Add New Placeholder */}
-        <button 
+        <button
           onClick={onAddAccount}
           className="flex flex-col items-center justify-center p-6 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/10 dark:hover:border-indigo-900/50 transition-all min-h-[200px] gap-3"
         >

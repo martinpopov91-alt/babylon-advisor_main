@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Trash2, Check, AlertCircle } from 'lucide-react';
+import { X, Plus, Trash2 } from 'lucide-react';
 import { Category, TransactionType } from '../types.ts';
 import { CATEGORY_ICONS_MAP } from '../constants.ts';
 
@@ -11,16 +11,16 @@ interface CategoryManagerModalProps {
   onDelete: (id: string) => void;
 }
 
-export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  categories, 
-  onSave, 
-  onDelete 
+export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
+  isOpen,
+  onClose,
+  categories,
+  onSave,
+  onDelete
 }) => {
   const [view, setView] = useState<'list' | 'edit'>('list');
   const [editingId, setEditingId] = useState<string | null>(null);
-  
+
   // Form State
   const [name, setName] = useState('');
   const [iconName, setIconName] = useState('Tag');
@@ -59,7 +59,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
     if (!name.trim()) return;
 
     const subs = subCategories.split(',').map(s => s.trim()).filter(s => s.length > 0);
-    
+
     const category: Category = {
       id: editingId || `custom-${Date.now()}`,
       name: name.trim(),
@@ -79,7 +79,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
     }
   };
 
-  const IconComponent = CATEGORY_ICONS_MAP[iconName] || CATEGORY_ICONS_MAP['Tag'];
+
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
@@ -96,12 +96,12 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
         {view === 'list' ? (
           <div className="flex-1 overflow-y-auto p-2">
             <div className="p-2 mb-2">
-               <button 
-                 onClick={handleCreate}
-                 className="w-full py-3 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all font-bold flex items-center justify-center gap-2"
-               >
-                 <Plus size={20} /> Create New Category
-               </button>
+              <button
+                onClick={handleCreate}
+                className="w-full py-3 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all font-bold flex items-center justify-center gap-2"
+              >
+                <Plus size={20} /> Create New Category
+              </button>
             </div>
             <div className="space-y-1">
               {categories.map(cat => {
@@ -113,15 +113,15 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                         <CatIcon size={18} />
                       </div>
                       <div>
-                         <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{cat.name}</p>
-                         <p className="text-[10px] text-slate-400">{cat.types.map(t => t.charAt(0) + t.slice(1).toLowerCase()).join(', ')}</p>
+                        <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{cat.name}</p>
+                        <p className="text-[10px] text-slate-400">{cat.types.map(t => t.charAt(0) + t.slice(1).toLowerCase()).join(', ')}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                       <button onClick={() => handleEdit(cat)} className="px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg">Edit</button>
-                       {cat.isCustom && (
-                         <button onClick={() => handleDelete(cat.id)} className="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg"><Trash2 size={16} /></button>
-                       )}
+                      <button onClick={() => handleEdit(cat)} className="px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg">Edit</button>
+                      {cat.isCustom && (
+                        <button onClick={() => handleDelete(cat.id)} className="p-1.5 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg"><Trash2 size={16} /></button>
+                      )}
                     </div>
                   </div>
                 );
@@ -132,8 +132,8 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
           <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
             <div>
               <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 required
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 value={name}
@@ -180,8 +180,8 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
 
             <div>
               <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Subcategories (comma separated)</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
                 value={subCategories}
                 onChange={e => setSubCategories(e.target.value)}
@@ -190,8 +190,8 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             </div>
 
             <div className="flex gap-3 pt-4">
-               <button type="button" onClick={() => setView('list')} className="flex-1 py-3 rounded-xl font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">Cancel</button>
-               <button type="submit" className="flex-1 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg">Save Category</button>
+              <button type="button" onClick={() => setView('list')} className="flex-1 py-3 rounded-xl font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700">Cancel</button>
+              <button type="submit" className="flex-1 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg">Save Category</button>
             </div>
           </form>
         )}

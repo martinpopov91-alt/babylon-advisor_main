@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { 
-  LayoutDashboard, 
-  Wallet, 
-  PiggyBank, 
-  CreditCard, 
-  TrendingUp, 
-  ArrowUpRight, 
-  ArrowDownRight, 
+import {
+  LayoutDashboard,
+  PiggyBank,
+  CreditCard,
+  TrendingUp,
+  ArrowUpRight,
+  ArrowDownRight,
   DollarSign,
   PieChart as PieIcon,
   Plus,
@@ -24,16 +23,15 @@ import {
   RefreshCw,
   ChevronLeft,
   ChevronRight,
-  Calendar as CalendarIcon,
   Save,
   Github,
   X,
   Landmark,
   Tag
 } from 'lucide-react';
-import { 
-  ResponsiveContainer, 
-  Tooltip as RechartsTooltip, 
+import {
+  ResponsiveContainer,
+  Tooltip as RechartsTooltip,
   Legend,
   BarChart,
   Bar,
@@ -62,6 +60,7 @@ import { Logo } from './components/Logo.tsx';
 import { AccountsView } from './components/AccountsView.tsx';
 import { AddAccountModal } from './components/AddAccountModal.tsx';
 import { CategoryManagerModal } from './components/CategoryManagerModal.tsx';
+import { useGistSync } from './hooks/useGistSync.ts';
 
 type TabType = 'dashboard' | 'transactions' | 'budget' | 'goals' | 'advisor' | 'summary' | 'accounts';
 
@@ -78,15 +77,15 @@ const App: React.FC = () => {
     try {
       const saved = localStorage.getItem(key);
       if (!saved) return fallback;
-      
+
       const parsed = JSON.parse(saved);
-      
+
       // Strict type check: If fallback is array, parsed MUST be array
       if (Array.isArray(fallback) && !Array.isArray(parsed)) {
         console.warn(`Data mismatch for ${key}: expected array, got ${typeof parsed}. Reverting to default.`);
         return fallback;
       }
-      
+
       return parsed;
     } catch (e) {
       console.warn(`Error parsing ${key} from storage`, e);
@@ -97,7 +96,7 @@ const App: React.FC = () => {
   const getUrlParams = () => {
     try {
       if (typeof window === 'undefined' || !window.location) {
-         return { tab: null, from: null, to: null, cur: null };
+        return { tab: null, from: null, to: null, cur: null };
       }
       const params = new URLSearchParams(window.location.search);
       return {
@@ -122,19 +121,19 @@ const App: React.FC = () => {
     }
   });
 
-  const [items, setItems] = useState<BudgetItem[]>(() => 
+  const [items, setItems] = useState<BudgetItem[]>(() =>
     safeParse('wealthflow_items', INITIAL_DATA)
   );
 
-  const [goals, setGoals] = useState<SavingsGoal[]>(() => 
+  const [goals, setGoals] = useState<SavingsGoal[]>(() =>
     safeParse('wealthflow_goals', INITIAL_GOALS)
   );
-  
-  const [accounts, setAccounts] = useState<Account[]>(() => 
+
+  const [accounts, setAccounts] = useState<Account[]>(() =>
     safeParse('wealthflow_accounts', INITIAL_ACCOUNTS)
   );
-  
-  const [categories, setCategories] = useState<Category[]>(() => 
+
+  const [categories, setCategories] = useState<Category[]>(() =>
     safeParse('wealthflow_categories', DEFAULT_CATEGORIES)
   );
 
@@ -144,7 +143,7 @@ const App: React.FC = () => {
     // Default to current month start/end safely avoiding timezone bug
     const firstDay = getLocalYYYYMMDD(new Date(now.getFullYear(), now.getMonth(), 1));
     const lastDay = getLocalYYYYMMDD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
-    
+
     return {
       startDate: urlParams.from || persisted.startDate || firstDay,
       endDate: urlParams.to || persisted.endDate || lastDay,
@@ -164,24 +163,56 @@ const App: React.FC = () => {
   const [modalDefaultType, setModalDefaultType] = useState<TransactionType | undefined>(undefined);
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<SavingsGoal | null>(null);
-  
+
   // Account Modals
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
   const [editingAccount, setEditingAccount] = useState<Account | null>(null);
-  
+
   // Category Manager Modal
   const [isCategoryManagerOpen, setIsCategoryManagerOpen] = useState(false);
 
   // Mobile Menu State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   // Budget Modal State
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
-  const [editingBudgetCategory, setEditingBudgetCategory] = useState<{name: string, currentAmount: number, type: TransactionType} | null>(null);
+  const [editingBudgetCategory, setEditingBudgetCategory] = useState<{ name: string, currentAmount: number, type: TransactionType } | null>(null);
 
   // New Month Modal State
   const [isNewMonthModalOpen, setIsNewMonthModalOpen] = useState(false);
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
+
+  // Gist Auto-Sync State
+  const [gistToken, setGistToken] = useState(() => localStorage.getItem('wealthflow_gh_token') || '');
+  const [gistId, setGistId] = useState(() => localStorage.getItem('wealthflow_gh_gist_id') || '');
+  const [autoSyncEnabled, setAutoSyncEnabled] = useState(() => localStorage.getItem('wealthflow_gh_autosync') === 'true');
+
+  const { syncStatus } = useGistSync({
+    data: { items, goals, settings, accounts, categories },
+    onImport: (data) => {
+      setItems(data.items);
+      setGoals(data.goals);
+      setSettings(data.settings);
+      setAccounts(data.accounts);
+      setCategories(data.categories);
+      showToast('Data synced from Gist!');
+    },
+    autoSyncEnabled,
+    gistId,
+    token: gistToken
+  });
+
+  useEffect(() => {
+    localStorage.setItem('wealthflow_gh_autosync', String(autoSyncEnabled));
+  }, [autoSyncEnabled]);
+
+  // Update token/id when they change in localStorage (from Modal)
+  useEffect(() => {
+    if (!isGitHubModalOpen) {
+      setGistToken(localStorage.getItem('wealthflow_gh_token') || '');
+      setGistId(localStorage.getItem('wealthflow_gh_gist_id') || '');
+    }
+  }, [isGitHubModalOpen]);
 
   // UI State for Modal & Toast
   const [confirmConfig, setConfirmConfig] = useState<{
@@ -193,7 +224,7 @@ const App: React.FC = () => {
     isOpen: false,
     title: '',
     message: '',
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   const [toastConfig, setToastConfig] = useState<{
@@ -226,7 +257,7 @@ const App: React.FC = () => {
     if (accounts.length > 0) {
       let needsUpdate = false;
       const defaultAccountId = accounts.find(a => a.isDefault)?.id || accounts[0].id;
-      
+
       const updatedItems = items.map(item => {
         if (!item.accountId) {
           needsUpdate = true;
@@ -331,11 +362,11 @@ const App: React.FC = () => {
         params.set('from', settings.startDate);
         params.set('to', settings.endDate);
         params.set('cur', settings.baseCurrency);
-        
+
         try {
           const newRelativePathQuery = window.location.pathname + '?' + params.toString();
           window.history.replaceState(null, '', newRelativePathQuery);
-        } catch(e) {
+        } catch (e) {
           // Ignore history errors in sandboxed environments
         }
       }
@@ -365,7 +396,7 @@ const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('wealthflow_accounts', JSON.stringify(accounts));
   }, [accounts]);
-  
+
   useEffect(() => {
     localStorage.setItem('wealthflow_categories', JSON.stringify(categories));
   }, [categories]);
@@ -383,13 +414,13 @@ const App: React.FC = () => {
   const handleNavigateMonth = (direction: 'prev' | 'next') => {
     const [y, m, d] = settings.startDate.split('-');
     const current = new Date(Number(y), Number(m) - 1, Number(d));
-    
+
     if (direction === 'prev') {
       current.setMonth(current.getMonth() - 1);
     } else {
       current.setMonth(current.getMonth() + 1);
     }
-    
+
     const newStart = getLocalYYYYMMDD(new Date(current.getFullYear(), current.getMonth(), 1));
     const newEnd = getLocalYYYYMMDD(new Date(current.getFullYear(), current.getMonth() + 1, 0));
 
@@ -409,7 +440,7 @@ const App: React.FC = () => {
       });
 
       if (templates.length > 0) {
-        const existingNextPeriodItems = items.filter(i => 
+        const existingNextPeriodItems = items.filter(i =>
           i.date >= newStart && i.date <= newEnd
         );
 
@@ -419,24 +450,24 @@ const App: React.FC = () => {
 
         templates.forEach(template => {
           let newDateStr = newStart;
-          
+
           try {
             const [oldY, oldM, oldD] = template.date.split('-');
             const oldDate = new Date(Number(oldY), Number(oldM) - 1, Number(oldD));
             const day = oldDate.getDate();
             const targetDate = new Date(targetDateObj.getFullYear(), targetDateObj.getMonth(), day);
-            
+
             if (targetDate.getMonth() !== targetDateObj.getMonth()) {
-              targetDate.setDate(0); 
+              targetDate.setDate(0);
             }
             newDateStr = getLocalYYYYMMDD(targetDate);
           } catch (e) {
             newDateStr = newStart;
           }
 
-          const isDuplicate = existingNextPeriodItems.some(ex => 
-            ex.name === template.name && 
-            ex.category === template.category && 
+          const isDuplicate = existingNextPeriodItems.some(ex =>
+            ex.name === template.name &&
+            ex.category === template.category &&
             Math.abs(ex.plannedAmount - template.plannedAmount) < 0.01
           );
 
@@ -467,11 +498,11 @@ const App: React.FC = () => {
     const income = filteredItems
       .filter(i => i.type === TransactionType.INCOME)
       .reduce((sum, i) => sum + i.actualAmount, 0);
-    
+
     const savings = filteredItems
       .filter(i => i.type === TransactionType.SAVING)
       .reduce((sum, i) => sum + i.actualAmount, 0);
-      
+
     const fixedExpenses = filteredItems
       .filter(i => i.type === TransactionType.FIXED_EXPENSE)
       .reduce((sum, i) => sum + i.actualAmount, 0);
@@ -485,7 +516,7 @@ const App: React.FC = () => {
     return {
       totalIncome: income,
       totalSavings: savings,
-      totalExpenses: totalSpent, 
+      totalExpenses: totalSpent,
       variableExpenses,
       balance: income - (totalSpent + savings)
     };
@@ -496,14 +527,14 @@ const App: React.FC = () => {
     const end = new Date(Number(ey), Number(em) - 1, Number(ed), 23, 59, 59, 999);
     const start = new Date();
     start.setHours(0, 0, 0, 0);
-    
+
     const diffTime = end.getTime() - start.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const safeDiffDays = Math.max(1, diffDays);
-    
+
     const daily = summary.balance > 0 ? summary.balance / safeDiffDays : 0;
     const weekly = daily * 7;
-    
+
     return {
       daysLeft: safeDiffDays,
       dailyBudget: daily,
@@ -520,9 +551,9 @@ const App: React.FC = () => {
     const sorted = Object.entries(categories)
       .filter(([_, value]) => value > 0)
       .sort((a, b) => b[1] - a[1]);
-    
+
     const totalSpent = sorted.reduce((sum, [, val]) => sum + val, 0);
-    
+
     return sorted.map(([name, value]) => ({
       name,
       value,
@@ -581,10 +612,10 @@ const App: React.FC = () => {
     if (editingAccount) {
       setAccounts(prev => prev.map(a => a.id === editingAccount.id ? { ...accountData, id: a.id, isDefault: a.isDefault } : a));
     } else {
-      const newAccount = { 
-        ...accountData, 
+      const newAccount = {
+        ...accountData,
         id: `acc-${Date.now()}`,
-        isDefault: accounts.length === 0 
+        isDefault: accounts.length === 0
       };
       setAccounts(prev => [...prev, newAccount]);
     }
@@ -646,7 +677,7 @@ const App: React.FC = () => {
 
   const handleBulkDelete = (ids: string[]) => {
     if (ids.length === 0) return;
-    
+
     setConfirmConfig({
       isOpen: true,
       title: `Delete ${ids.length} Transactions?`,
@@ -678,7 +709,7 @@ const App: React.FC = () => {
 
   const handleSaveBudget = (oldCategory: string | null, newCategory: string, amount: number, type: TransactionType) => {
     const itemsSnapshot = [...items];
-    
+
     setItems(prev => {
       let updatedItems = prev.map(item => {
         if (oldCategory && item.category === oldCategory && item.date >= settings.startDate && item.date <= settings.endDate) {
@@ -688,17 +719,17 @@ const App: React.FC = () => {
       });
 
       let budgetSet = false;
-      
+
       updatedItems = updatedItems.map(item => {
         const inPeriod = item.date >= settings.startDate && item.date <= settings.endDate;
         if (inPeriod && item.category === newCategory) {
           if (!budgetSet && (item.plannedAmount > 0 || item.actualAmount === 0)) {
             budgetSet = true;
-            return { ...item, plannedAmount: amount, type: type }; 
+            return { ...item, plannedAmount: amount, type: type };
           } else if (item.plannedAmount > 0) {
-             return { ...item, plannedAmount: 0, type: type };
+            return { ...item, plannedAmount: 0, type: type };
           }
-          return { ...item, type: type }; 
+          return { ...item, type: type };
         }
         return item;
       });
@@ -731,23 +762,23 @@ const App: React.FC = () => {
       title: `Delete Budget for ${category}?`,
       message: 'This will remove the budget limit. If there are no transactions, the category will be removed entirely.',
       onConfirm: () => {
-        const itemsSnapshot = [...items]; 
+        const itemsSnapshot = [...items];
         setItems(prev => {
-           return prev.filter(item => {
-             const inPeriod = item.date >= settings.startDate && item.date <= settings.endDate;
-             if (inPeriod && item.category === category) {
-               if (item.actualAmount === 0) {
-                 return false;
-               }
-             }
-             return true;
-           }).map(item => {
-             const inPeriod = item.date >= settings.startDate && item.date <= settings.endDate;
-             if (inPeriod && item.category === category) {
-               return { ...item, plannedAmount: 0 };
-             }
-             return item;
-           });
+          return prev.filter(item => {
+            const inPeriod = item.date >= settings.startDate && item.date <= settings.endDate;
+            if (inPeriod && item.category === category) {
+              if (item.actualAmount === 0) {
+                return false;
+              }
+            }
+            return true;
+          }).map(item => {
+            const inPeriod = item.date >= settings.startDate && item.date <= settings.endDate;
+            if (inPeriod && item.category === category) {
+              return { ...item, plannedAmount: 0 };
+            }
+            return item;
+          });
         });
         showToast(`Budget deleted for ${category}`, () => {
           setItems(itemsSnapshot);
@@ -763,14 +794,14 @@ const App: React.FC = () => {
 
   const handleSaveGoal = (goalData: Omit<SavingsGoal, 'id'>) => {
     if (editingGoal) {
-       setGoals(prev => prev.map(g => g.id === editingGoal.id ? { ...goalData, id: g.id } : g));
+      setGoals(prev => prev.map(g => g.id === editingGoal.id ? { ...goalData, id: g.id } : g));
     } else {
-       const newGoal: SavingsGoal = { ...goalData, id: `goal-${Date.now()}` };
-       setGoals(prev => [...prev, newGoal]);
+      const newGoal: SavingsGoal = { ...goalData, id: `goal-${Date.now()}` };
+      setGoals(prev => [...prev, newGoal]);
     }
     closeGoalModal();
   };
-  
+
   const handleDeleteGoal = (id: string) => {
     const goalToDelete = goals.find(g => g.id === id);
     if (!goalToDelete) return;
@@ -796,8 +827,8 @@ const App: React.FC = () => {
   const toggleTheme = () => setIsDarkMode(prev => !prev);
 
   const BottomNavItem = ({ tab, icon: Icon, label }: { tab: TabType, icon: any, label: string }) => (
-    <button 
-      onClick={() => setActiveTab(tab)} 
+    <button
+      onClick={() => setActiveTab(tab)}
       className={`flex flex-col items-center justify-center p-2 min-w-[50px] transition-all duration-200 ${activeTab === tab ? 'text-indigo-600 dark:text-indigo-400 scale-105' : 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300'}`}
     >
       <Icon size={24} strokeWidth={activeTab === tab ? 2.5 : 2} />
@@ -845,124 +876,153 @@ const App: React.FC = () => {
           </button>
         </nav>
         <div className="p-4 mt-auto border-t border-slate-100 dark:border-slate-800">
-           {!hasApiKey && (
-             <button 
-               onClick={handleOpenKeySelection}
-               className="w-full flex items-center gap-3 px-4 py-3 mb-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 font-bold text-xs border border-amber-200 dark:border-amber-800/50 transition-all hover:bg-amber-100 dark:hover:bg-amber-800/40"
-             >
-               <Key size={16} /> Enable AI Features
-             </button>
-           )}
-           <button 
-             onClick={() => setIsCategoryManagerOpen(true)}
-             className="w-full flex items-center gap-3 px-4 py-3 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all hover:bg-slate-100 dark:hover:bg-slate-700"
-           >
-             <Tag size={16} /> Manage Categories
-           </button>
-           <div className="flex items-center justify-between mb-4">
-              <h4 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Appearance</h4>
-              <button 
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              >
-                {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-           </div>
-           <h4 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Data Management</h4>
-           <div className="grid grid-cols-2 gap-2">
-              <button onClick={handleManualSave} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all" title="Save All Changes"><Save size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Save</span></button>
-              <button onClick={() => setIsNewMonthModalOpen(true)} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all" title="Start New Month"><RefreshCw size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">New Month</span></button>
-              <button onClick={handleBackup} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all"><Download size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Backup</span></button>
-              <button onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all"><Upload size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Restore</span></button>
-              <button onClick={() => setIsGitHubModalOpen(true)} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all" title="GitHub Sync"><Github size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Sync</span></button>
-              <input type="file" ref={fileInputRef} className="hidden" accept=".json" onChange={handleRestore} />
-           </div>
+          {!hasApiKey && (
+            <button
+              onClick={handleOpenKeySelection}
+              className="w-full flex items-center gap-3 px-4 py-3 mb-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 font-bold text-xs border border-amber-200 dark:border-amber-800/50 transition-all hover:bg-amber-100 dark:hover:bg-amber-800/40"
+            >
+              <Key size={16} /> Enable AI Features
+            </button>
+          )}
+          <button
+            onClick={() => setIsCategoryManagerOpen(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all hover:bg-slate-100 dark:hover:bg-slate-700"
+          >
+            <Tag size={16} /> Manage Categories
+          </button>
+          <div className="flex items-center gap-2">
+            {autoSyncEnabled && (
+              <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500">
+                {syncStatus === 'syncing' ? (
+                  <>
+                    <RefreshCw size={12} className="animate-spin text-indigo-500" />
+                    <span className="text-indigo-600 dark:text-indigo-400">SYNCING...</span>
+                  </>
+                ) : syncStatus === 'success' ? (
+                  <>
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                    <span className="opacity-70">SAVED</span>
+                  </>
+                ) : syncStatus === 'error' ? (
+                  <>
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                    <span className="text-rose-500">SYNC ERROR</span>
+                  </>
+                ) : (
+                  <span className="opacity-50">SYNC READY</span>
+                )}
+              </div>
+            )}
+            <button
+              onClick={() => setIsGitHubModalOpen(true)}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all relative group"
+              title="Cloud Sync"
+            >
+              <Github size={20} />
+              {syncStatus === 'error' && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border border-white dark:border-slate-900"></span>}
+            </button>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </div>
+          <h4 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Data Management</h4>
+          <div className="grid grid-cols-2 gap-2">
+            <button onClick={handleManualSave} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all" title="Save All Changes"><Save size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Save</span></button>
+            <button onClick={() => setIsNewMonthModalOpen(true)} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all" title="Start New Month"><RefreshCw size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">New Month</span></button>
+            <button onClick={handleBackup} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all"><Download size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Backup</span></button>
+            <button onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all"><Upload size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Restore</span></button>
+            <button onClick={() => setIsGitHubModalOpen(true)} className="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60 transition-all" title="GitHub Sync"><Github size={20} className="mb-1" /><span className="text-[10px] font-medium text-center leading-tight">Sync</span></button>
+            <input type="file" ref={fileInputRef} className="hidden" accept=".json" onChange={handleRestore} />
+          </div>
         </div>
       </aside>
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center flex-shrink-0 relative z-20 transition-colors">
           <div className="flex items-center gap-3">
-             <div className="md:hidden text-indigo-600 dark:text-indigo-400">
-               <Logo className="h-6 w-6" variant={1} />
-             </div>
-             <h1 className="text-lg md:text-2xl font-bold text-slate-800 dark:text-slate-100 truncate max-w-[150px] sm:max-w-none">
-               {activeTab === 'summary' ? 'Summary' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-             </h1>
+            <div className="md:hidden text-indigo-600 dark:text-indigo-400">
+              <Logo className="h-6 w-6" variant={1} />
+            </div>
+            <h1 className="text-lg md:text-2xl font-bold text-slate-800 dark:text-slate-100 truncate max-w-[150px] sm:max-w-none">
+              {activeTab === 'summary' ? 'Summary' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+            </h1>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
-             <button 
-               onClick={() => setIsMobileMenuOpen(true)} 
-               className="md:hidden p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-             >
-                <Menu size={20} />
-             </button>
-             <button onClick={() => { setEditingItem(null); setIsTransactionModalOpen(true); }} className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm">
-                <Plus size={18} /> <span className="hidden sm:inline">Add Transaction</span>
-             </button>
-             <div className="text-right hidden md:block pl-4 border-l border-slate-200 dark:border-slate-800">
-               <p className="text-sm text-slate-500 dark:text-slate-400">Left to Spend</p>
-               <div className="flex items-center gap-2">
-                 <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{currentCurrency.symbol}{summary.balance.toLocaleString()}</p>
-                 <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded font-bold uppercase">{spendingInsights.daysLeft}d left</span>
-               </div>
-             </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <Menu size={20} />
+            </button>
+            <button onClick={() => { setEditingItem(null); setIsTransactionModalOpen(true); }} className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm">
+              <Plus size={18} /> <span className="hidden sm:inline">Add Transaction</span>
+            </button>
+            <div className="text-right hidden md:block pl-4 border-l border-slate-200 dark:border-slate-800">
+              <p className="text-sm text-slate-500 dark:text-slate-400">Left to Spend</p>
+              <div className="flex items-center gap-2">
+                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{currentCurrency.symbol}{summary.balance.toLocaleString()}</p>
+                <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded font-bold uppercase">{spendingInsights.daysLeft}d left</span>
+              </div>
+            </div>
           </div>
         </header>
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div className="fixed inset-0 z-[60] bg-white dark:bg-slate-950 p-6 flex flex-col md:hidden animate-in slide-in-from-top-5 duration-300">
-             <div className="flex justify-between items-center mb-8">
-               <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
-                  <Logo className="h-8 w-8" variant={1} />
-                  <span className="text-xl font-bold">Babylon Advisor</span>
-               </div>
-               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
-                 <X size={24} />
-               </button>
-             </div>
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                <Logo className="h-8 w-8" variant={1} />
+                <span className="text-xl font-bold">Babylon Advisor</span>
+              </div>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
+                <X size={24} />
+              </button>
+            </div>
 
-             <div className="space-y-6">
-               <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <span className="font-bold text-slate-700 dark:text-slate-300">Theme</span>
-                  <button onClick={toggleTheme} className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                    {isDarkMode ? <Moon size={20} className="text-indigo-400" /> : <Sun size={20} className="text-amber-500" />}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
+                <span className="font-bold text-slate-700 dark:text-slate-300">Theme</span>
+                <button onClick={toggleTheme} className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                  {isDarkMode ? <Moon size={20} className="text-indigo-400" /> : <Sun size={20} className="text-amber-500" />}
+                </button>
+              </div>
+
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); setIsCategoryManagerOpen(true); }}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 transition-all hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400"
+              >
+                <Tag size={18} /> Manage Categories
+              </button>
+
+              <div>
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Data Management</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  <button onClick={handleManualSave} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
+                    <Save size={24} className="mb-2 text-indigo-500" />
+                    <span className="text-xs font-bold">Save</span>
                   </button>
-               </div>
-               
-               <button 
-                 onClick={() => { setIsMobileMenuOpen(false); setIsCategoryManagerOpen(true); }}
-                 className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-800 transition-all hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 dark:hover:text-indigo-400"
-               >
-                 <Tag size={18} /> Manage Categories
-               </button>
+                  <button onClick={() => { setIsNewMonthModalOpen(true); }} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
+                    <RefreshCw size={24} className="mb-2 text-emerald-500" />
+                    <span className="text-xs font-bold">New Period</span>
+                  </button>
+                  <button onClick={handleBackup} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
+                    <Download size={24} className="mb-2 text-blue-500" />
+                    <span className="text-xs font-bold">Backup File</span>
+                  </button>
+                  <button onClick={() => { setIsMobileMenuOpen(false); setIsGitHubModalOpen(true); }} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
+                    <Github size={24} className="mb-2 text-slate-700 dark:text-slate-300" />
+                    <span className="text-xs font-bold">Cloud Sync</span>
+                  </button>
+                </div>
+              </div>
 
-               <div>
-                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Data Management</h4>
-                 <div className="grid grid-cols-2 gap-3">
-                   <button onClick={handleManualSave} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
-                     <Save size={24} className="mb-2 text-indigo-500" />
-                     <span className="text-xs font-bold">Save</span>
-                   </button>
-                   <button onClick={() => { setIsNewMonthModalOpen(true); }} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
-                     <RefreshCw size={24} className="mb-2 text-emerald-500" />
-                     <span className="text-xs font-bold">New Period</span>
-                   </button>
-                   <button onClick={handleBackup} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
-                     <Download size={24} className="mb-2 text-blue-500" />
-                     <span className="text-xs font-bold">Backup File</span>
-                   </button>
-                   <button onClick={() => { setIsMobileMenuOpen(false); setIsGitHubModalOpen(true); }} className="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-slate-100 dark:border-slate-800 transition-all">
-                     <Github size={24} className="mb-2 text-slate-700 dark:text-slate-300" />
-                     <span className="text-xs font-bold">Cloud Sync</span>
-                   </button>
-                 </div>
-               </div>
-               
-               <button onClick={() => fileInputRef.current?.click()} className="w-full py-4 rounded-xl bg-slate-100 dark:bg-slate-800 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
-                 <Upload size={18} /> Restore from File
-               </button>
-             </div>
+              <button onClick={() => fileInputRef.current?.click()} className="w-full py-4 rounded-xl bg-slate-100 dark:bg-slate-800 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center gap-2">
+                <Upload size={18} /> Restore from File
+              </button>
+            </div>
           </div>
         )}
 
@@ -975,7 +1035,7 @@ const App: React.FC = () => {
                 <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-xs underline hover:text-amber-900 dark:hover:text-amber-100">Learn about billing</a>
               </div>
             </div>
-            <button 
+            <button
               onClick={handleOpenKeySelection}
               className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm w-full sm:w-auto"
             >
@@ -986,37 +1046,37 @@ const App: React.FC = () => {
 
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 shadow-sm relative z-10 transition-colors">
           <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
-             {/* Month Navigation for History */}
-             <div className="flex items-center bg-slate-50 dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700/60">
-                <button 
-                  onClick={() => handleNavigateMonth('prev')}
-                  className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded-md text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors shadow-sm"
-                  title="Previous Month"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <span className="px-3 text-xs font-bold text-slate-700 dark:text-slate-300 min-w-[100px] text-center">
-                  {formatCurrentMonth()}
-                </span>
-                <button 
-                  onClick={() => handleNavigateMonth('next')}
-                  className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded-md text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors shadow-sm"
-                  title="Next Month"
-                >
-                  <ChevronRight size={16} />
-                </button>
-             </div>
+            {/* Month Navigation for History */}
+            <div className="flex items-center bg-slate-50 dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700/60">
+              <button
+                onClick={() => handleNavigateMonth('prev')}
+                className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded-md text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors shadow-sm"
+                title="Previous Month"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="px-3 text-xs font-bold text-slate-700 dark:text-slate-300 min-w-[100px] text-center">
+                {formatCurrentMonth()}
+              </span>
+              <button
+                onClick={() => handleNavigateMonth('next')}
+                className="p-1 hover:bg-white dark:hover:bg-slate-700 rounded-md text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors shadow-sm"
+                title="Next Month"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
 
-             <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+            <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
 
             <div className="flex items-center gap-2">
               <div className="hidden sm:flex items-center gap-2">
-                 <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Start</label>
-                 <input type="date" value={settings.startDate} onChange={(e) => setSettings(s => ({ ...s, startDate: e.target.value }))} className="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none text-slate-800 dark:text-slate-200 w-28 focus:ring-1 focus:ring-indigo-500"/>
+                <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Start</label>
+                <input type="date" value={settings.startDate} onChange={(e) => setSettings(s => ({ ...s, startDate: e.target.value }))} className="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none text-slate-800 dark:text-slate-200 w-28 focus:ring-1 focus:ring-indigo-500" />
               </div>
               <div className="hidden sm:flex items-center gap-2">
-                 <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">End</label>
-                 <input type="date" value={settings.endDate} onChange={(e) => setSettings(s => ({ ...s, endDate: e.target.value }))} className="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none text-slate-800 dark:text-slate-200 w-28 focus:ring-1 focus:ring-indigo-500"/>
+                <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">End</label>
+                <input type="date" value={settings.endDate} onChange={(e) => setSettings(s => ({ ...s, endDate: e.target.value }))} className="text-xs font-medium bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 outline-none text-slate-800 dark:text-slate-200 w-28 focus:ring-1 focus:ring-indigo-500" />
               </div>
             </div>
           </div>
@@ -1031,7 +1091,7 @@ const App: React.FC = () => {
             </div>
             {/* Mobile Summary Link */}
             <div className="sm:hidden">
-              <button 
+              <button
                 onClick={() => setActiveTab('summary')}
                 className={`text-xs font-bold ${activeTab === 'summary' ? 'text-indigo-600' : 'text-slate-500'}`}
               >
@@ -1040,7 +1100,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8 bg-slate-50 dark:bg-slate-950 transition-colors">
           <div className="max-w-7xl mx-auto h-full flex flex-col">
             {activeTab === 'dashboard' && (
@@ -1061,10 +1121,10 @@ const App: React.FC = () => {
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={budgetChartData}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? "#334155" : "#f1f5f9"} />
-                            <XAxis dataKey="name" tick={{fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12}} axisLine={false} tickLine={false} />
-                            <YAxis tick={{fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12}} axisLine={false} tickLine={false} tickFormatter={(v) => `${currentCurrency.symbol}${v}`} />
-                            <RechartsTooltip cursor={{fill: isDarkMode ? '#1e293b' : '#f8fafc'}} contentStyle={{backgroundColor: isDarkMode ? '#0f172a' : '#ffffff', borderRadius: '8px', border: 'none'}} />
-                            <Legend wrapperStyle={{paddingTop: '20px'}} iconType="circle"/>
+                            <XAxis dataKey="name" tick={{ fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                            <YAxis tick={{ fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${currentCurrency.symbol}${v}`} />
+                            <RechartsTooltip cursor={{ fill: isDarkMode ? '#1e293b' : '#f8fafc' }} contentStyle={{ backgroundColor: isDarkMode ? '#0f172a' : '#ffffff', borderRadius: '8px', border: 'none' }} />
+                            <Legend wrapperStyle={{ paddingTop: '20px' }} iconType="circle" />
                             <Bar name="Planned" dataKey="planned" fill={isDarkMode ? "#475569" : "#cbd5e1"} radius={[4, 4, 0, 0]} maxBarSize={50} />
                             <Bar name="Actual" dataKey="actual" fill="#6366f1" radius={[4, 4, 0, 0]} maxBarSize={50} />
                           </BarChart>
@@ -1072,18 +1132,18 @@ const App: React.FC = () => {
                       </div>
                     </div>
                     <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
-                       <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-6">Recent Activity</h3>
-                       <div className="space-y-4">
-                         {recentTransactions.length > 0 ? recentTransactions.map(item => (
-                             <div key={item.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group" onClick={() => handleEditTransaction(item)}>
-                               <div className="flex items-center gap-4">
-                                 <div className={`p-2.5 rounded-full ${item.type === TransactionType.INCOME ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : item.type === TransactionType.SAVING ? 'bg-indigo-100 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>{getCategoryIcon(item.category)}</div>
-                                 <div className="min-w-0"><p className="font-semibold text-slate-800 dark:text-slate-100 text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</p><p className="text-xs text-slate-500 dark:text-slate-400">{item.date} • {item.category}</p></div>
-                               </div>
-                               <span className={`font-bold text-sm whitespace-nowrap ml-2 ${item.type === TransactionType.INCOME ? 'text-emerald-600 dark:text-emerald-400' : item.type === TransactionType.SAVING ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-800 dark:text-slate-200'}`}>{item.type === TransactionType.INCOME ? '+' : '-'}{currentCurrency.symbol}{item.actualAmount.toFixed(2)}</span>
-                             </div>
-                           )) : <div className="text-center py-8 text-slate-400 dark:text-slate-600 text-sm">No activity in this period</div>}
-                       </div>
+                      <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-6">Recent Activity</h3>
+                      <div className="space-y-4">
+                        {recentTransactions.length > 0 ? recentTransactions.map(item => (
+                          <div key={item.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group" onClick={() => handleEditTransaction(item)}>
+                            <div className="flex items-center gap-4">
+                              <div className={`p-2.5 rounded-full ${item.type === TransactionType.INCOME ? 'bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' : item.type === TransactionType.SAVING ? 'bg-indigo-100 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>{getCategoryIcon(item.category)}</div>
+                              <div className="min-w-0"><p className="font-semibold text-slate-800 dark:text-slate-100 text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{item.name}</p><p className="text-xs text-slate-500 dark:text-slate-400">{item.date} • {item.category}</p></div>
+                            </div>
+                            <span className={`font-bold text-sm whitespace-nowrap ml-2 ${item.type === TransactionType.INCOME ? 'text-emerald-600 dark:text-emerald-400' : item.type === TransactionType.SAVING ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-800 dark:text-slate-200'}`}>{item.type === TransactionType.INCOME ? '+' : '-'}{currentCurrency.symbol}{item.actualAmount.toFixed(2)}</span>
+                          </div>
+                        )) : <div className="text-center py-8 text-slate-400 dark:text-slate-600 text-sm">No activity in this period</div>}
+                      </div>
                     </div>
                   </div>
                   <div className="space-y-6 md:space-y-8">
@@ -1096,19 +1156,19 @@ const App: React.FC = () => {
                       <button onClick={() => setActiveTab('advisor')} className="w-full bg-white text-indigo-600 py-3 rounded-xl font-bold hover:bg-indigo-50 transition-colors relative z-10 shadow-lg">Ask AI Advisor</button>
                     </div>
                     <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
-                       <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-6">Savings Progress</h3>
-                       <div className="space-y-5">
-                         {goals.slice(0, 3).map(goal => {
-                            const saved = filteredItems.filter(i => i.type === TransactionType.SAVING && i.category === goal.category).reduce((sum, i) => sum + i.actualAmount, 0) + goal.initialAmount;
-                            const percent = Math.min((saved / goal.targetAmount) * 100, 100);
-                            return (
-                              <div key={goal.id}>
-                                <div className="flex justify-between text-sm mb-1.5"><span className="font-medium text-slate-700 dark:text-slate-200">{goal.name}</span><span className="text-slate-500 dark:text-slate-400 text-xs">{percent.toFixed(0)}%</span></div>
-                                <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden"><div className="h-full rounded-full transition-all duration-500" style={{ width: `${percent}%`, backgroundColor: goal.color }}></div></div>
-                              </div>
-                            );
-                         })}
-                       </div>
+                      <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-6">Savings Progress</h3>
+                      <div className="space-y-5">
+                        {goals.slice(0, 3).map(goal => {
+                          const saved = filteredItems.filter(i => i.type === TransactionType.SAVING && i.category === goal.category).reduce((sum, i) => sum + i.actualAmount, 0) + goal.initialAmount;
+                          const percent = Math.min((saved / goal.targetAmount) * 100, 100);
+                          return (
+                            <div key={goal.id}>
+                              <div className="flex justify-between text-sm mb-1.5"><span className="font-medium text-slate-700 dark:text-slate-200">{goal.name}</span><span className="text-slate-500 dark:text-slate-400 text-xs">{percent.toFixed(0)}%</span></div>
+                              <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden"><div className="h-full rounded-full transition-all duration-500" style={{ width: `${percent}%`, backgroundColor: goal.color }}></div></div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1121,10 +1181,10 @@ const App: React.FC = () => {
             )}
             {activeTab === 'accounts' && (
               <div className="animate-in fade-in duration-300">
-                <AccountsView 
-                  accounts={accounts} 
-                  items={items} 
-                  symbol={currentCurrency.symbol} 
+                <AccountsView
+                  accounts={accounts}
+                  items={items}
+                  symbol={currentCurrency.symbol}
                   onAddAccount={() => { setEditingAccount(null); setIsAccountModalOpen(true); }}
                   onEditAccount={(acc) => { setEditingAccount(acc); setIsAccountModalOpen(true); }}
                   onDeleteAccount={handleDeleteAccount}
@@ -1133,14 +1193,14 @@ const App: React.FC = () => {
             )}
             {activeTab === 'transactions' && (
               <div className="h-full animate-in fade-in duration-300">
-                <TransactionsTable 
-                  title="Filtered History" 
-                  items={filteredItems} 
-                  symbol={currentCurrency.symbol} 
-                  onEdit={handleEditTransaction} 
-                  onDelete={handleDeleteTransaction} 
-                  onBulkDelete={handleBulkDelete} 
-                  className="h-full" 
+                <TransactionsTable
+                  title="Filtered History"
+                  items={filteredItems}
+                  symbol={currentCurrency.symbol}
+                  onEdit={handleEditTransaction}
+                  onDelete={handleDeleteTransaction}
+                  onBulkDelete={handleBulkDelete}
+                  className="h-full"
                   accounts={accounts}
                   categories={categories}
                 />
@@ -1148,11 +1208,11 @@ const App: React.FC = () => {
             )}
             {activeTab === 'budget' && (
               <div className="animate-in fade-in duration-300">
-                <BudgetView 
-                  items={filteredItems} 
-                  symbol={currentCurrency.symbol} 
-                  onSetBudget={handleSetBudget} 
-                  onRemoveBudget={handleRemoveBudget} 
+                <BudgetView
+                  items={filteredItems}
+                  symbol={currentCurrency.symbol}
+                  onSetBudget={handleSetBudget}
+                  onRemoveBudget={handleRemoveBudget}
                   onAddBudget={handleCreateNewBudget}
                   categories={categories}
                 />
@@ -1170,40 +1230,40 @@ const App: React.FC = () => {
             )}
           </div>
         </div>
-        
+
         {/* Mobile Bottom Navigation */}
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50 px-2 pb-[env(safe-area-inset-bottom,20px)] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-           <div className="flex justify-around items-center h-16">
-              <BottomNavItem tab="dashboard" icon={LayoutDashboard} label="Home" />
-              <BottomNavItem tab="accounts" icon={Landmark} label="Accts" />
-              <BottomNavItem tab="transactions" icon={CreditCard} label="Txns" />
-              <BottomNavItem tab="budget" icon={PieIcon} label="Budget" />
-              <BottomNavItem tab="advisor" icon={TrendingUp} label="AI" />
-           </div>
+          <div className="flex justify-around items-center h-16">
+            <BottomNavItem tab="dashboard" icon={LayoutDashboard} label="Home" />
+            <BottomNavItem tab="accounts" icon={Landmark} label="Accts" />
+            <BottomNavItem tab="transactions" icon={CreditCard} label="Txns" />
+            <BottomNavItem tab="budget" icon={PieIcon} label="Budget" />
+            <BottomNavItem tab="advisor" icon={TrendingUp} label="AI" />
+          </div>
         </div>
-        
-        <AddTransactionModal 
-          isOpen={isTransactionModalOpen} 
-          symbol={currentCurrency.symbol} 
-          onClose={closeTransactionModal} 
-          onSave={handleSaveTransaction} 
-          initialData={editingItem} 
-          defaultCategory={modalDefaultCategory} 
-          defaultType={modalDefaultType} 
+
+        <AddTransactionModal
+          isOpen={isTransactionModalOpen}
+          symbol={currentCurrency.symbol}
+          onClose={closeTransactionModal}
+          onSave={handleSaveTransaction}
+          initialData={editingItem}
+          defaultCategory={modalDefaultCategory}
+          defaultType={modalDefaultType}
           onDelete={editingItem ? () => { closeTransactionModal(); handleDeleteTransaction(editingItem.id); } : undefined}
           accounts={accounts}
           categories={categories}
         />
-        <AddGoalModal 
-          isOpen={isGoalModalOpen} 
-          symbol={currentCurrency.symbol} 
-          onClose={closeGoalModal} 
-          onSave={handleSaveGoal} 
-          initialData={editingGoal} 
+        <AddGoalModal
+          isOpen={isGoalModalOpen}
+          symbol={currentCurrency.symbol}
+          onClose={closeGoalModal}
+          onSave={handleSaveGoal}
+          initialData={editingGoal}
           onDelete={editingGoal ? () => { closeGoalModal(); handleDeleteGoal(editingGoal.id); } : undefined}
           categories={categories}
         />
-        
+
         <AddAccountModal
           isOpen={isAccountModalOpen}
           symbol={currentCurrency.symbol}
@@ -1228,14 +1288,16 @@ const App: React.FC = () => {
           onClose={() => setIsNewMonthModalOpen(false)}
           onConfirm={handleConfirmNewMonth}
         />
-        
+
         <GitHubSyncModal
           isOpen={isGitHubModalOpen}
           onClose={() => setIsGitHubModalOpen(false)}
           currentData={{ items, goals, settings, accounts, categories } as any}
           onImport={handleImportFromGitHub}
+          autoSyncEnabled={autoSyncEnabled}
+          onToggleAutoSync={setAutoSyncEnabled}
         />
-        
+
         <CategoryManagerModal
           isOpen={isCategoryManagerOpen}
           onClose={() => setIsCategoryManagerOpen(false)}
@@ -1244,15 +1306,15 @@ const App: React.FC = () => {
           onDelete={handleDeleteCategory}
         />
 
-        <ConfirmationModal 
+        <ConfirmationModal
           isOpen={confirmConfig.isOpen}
           title={confirmConfig.title}
           message={confirmConfig.message}
           onConfirm={confirmConfig.onConfirm}
           onClose={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
         />
-        
-        <NotificationToast 
+
+        <NotificationToast
           isVisible={toastConfig.isVisible}
           message={toastConfig.message}
           onUndo={toastConfig.onUndo}

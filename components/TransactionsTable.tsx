@@ -11,20 +11,19 @@ interface TransactionsTableProps {
   onDelete: (id: string) => void;
   onBulkDelete?: (ids: string[]) => void;
   className?: string;
-  onImport?: (items: BudgetItem[]) => void;
+
   accounts: Account[]; // To resolve account names
   categories: Category[];
 }
 
-export const TransactionsTable: React.FC<TransactionsTableProps> = ({ 
-  items, 
-  title, 
-  symbol, 
-  onEdit, 
-  onDelete, 
-  onBulkDelete, 
-  className, 
-  onImport, 
+export const TransactionsTable: React.FC<TransactionsTableProps> = ({
+  items,
+  title,
+  symbol,
+  onEdit,
+  onDelete,
+  onBulkDelete,
+  className,
   accounts,
   categories
 }) => {
@@ -60,15 +59,20 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     return IconComponent ? <IconComponent size={14} /> : <MoreHorizontal size={14} />;
   };
 
-  const getAccountName = (accountId?: string) => {
-    if (!accountId) return '';
-    return accounts.find(a => a.id === accountId)?.name || 'Unknown Account';
+  const getAccountName = (item: BudgetItem) => {
+    const fromName = accounts.find(a => a.id === item.accountId)?.name || 'Unknown';
+    if (item.type === TransactionType.TRANSFER && item.toAccountId) {
+      const toName = accounts.find(a => a.id === item.toAccountId)?.name || 'Unknown';
+      return `${fromName} -> ${toName}`;
+    }
+    return fromName;
   };
 
   const getAmountColor = (type: TransactionType) => {
     switch (type) {
       case TransactionType.INCOME: return 'text-emerald-600 dark:text-emerald-400';
       case TransactionType.SAVING: return 'text-indigo-600 dark:text-indigo-400';
+      case TransactionType.TRANSFER: return 'text-blue-600 dark:text-blue-400';
       default: return 'text-slate-700 dark:text-slate-300';
     }
   };
@@ -109,7 +113,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
             <div className="flex items-center gap-3">
               <span className="font-bold text-indigo-700 dark:text-indigo-300">{selectedIds.size} selected</span>
               <div className="h-4 w-px bg-indigo-200 dark:bg-indigo-700"></div>
-              <button 
+              <button
                 onClick={() => setSelectedIds(new Set())}
                 className="flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200"
               >
@@ -117,14 +121,14 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
               </button>
             </div>
             <div className="flex items-center gap-2">
-               {onBulkDelete && (
-                 <button 
-                   onClick={handleBulkAction}
-                   className="flex items-center gap-2 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"
-                 >
-                   <Trash2 size={14} /> Delete
-                 </button>
-               )}
+              {onBulkDelete && (
+                <button
+                  onClick={handleBulkAction}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-colors shadow-sm"
+                >
+                  <Trash2 size={14} /> Delete
+                </button>
+              )}
             </div>
           </div>
         ) : (
@@ -143,7 +147,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                 </span>
               </div>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <div className="flex gap-2 w-full sm:w-auto">
                 <div className="relative group flex-1 sm:flex-none sm:min-w-[140px]">
@@ -158,6 +162,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     <option value={TransactionType.EXPENSE}>Expenses</option>
                     <option value={TransactionType.FIXED_EXPENSE}>Fixed Expenses</option>
                     <option value={TransactionType.SAVING}>Savings</option>
+                    <option value={TransactionType.TRANSFER}>Transfers</option>
                   </select>
                 </div>
 
@@ -177,7 +182,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
               </div>
 
               <div className="hidden lg:block h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
-              
+
               <div className="hidden lg:flex flex-col text-right">
                 <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">Filtered Total</span>
                 <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
@@ -188,24 +193,24 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           </>
         )}
       </div>
-      
+
       <div className="overflow-x-auto flex-1">
         <table className="w-full text-sm text-left">
           <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50 dark:bg-slate-900 sticky top-0 z-10 transition-colors border-b border-slate-200 dark:border-slate-800">
             <tr>
               <th className="px-4 py-3 w-[40px] text-center">
-                <button 
-                  onClick={toggleSelectAll} 
+                <button
+                  onClick={toggleSelectAll}
                   className="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                 >
                   {isAllSelected ? (
                     <CheckSquare size={18} className="text-indigo-600 dark:text-indigo-400" />
                   ) : isIndeterminate ? (
                     <div className="relative">
-                       <Square size={18} />
-                       <div className="absolute inset-0 flex items-center justify-center">
-                         <div className="w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-sm"></div>
-                       </div>
+                      <Square size={18} />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-sm"></div>
+                      </div>
                     </div>
                   ) : (
                     <Square size={18} />
@@ -227,7 +232,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                   <div className="flex flex-col items-center gap-2">
                     <Filter size={24} className="opacity-20" />
                     <p>No transactions match your current filters.</p>
-                    <button 
+                    <button
                       onClick={() => { setTypeFilter('ALL'); setCategoryFilter('ALL'); }}
                       className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline mt-1"
                     >
@@ -239,21 +244,21 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
             ) : (
               filteredItems.map((item) => {
                 const isSelected = selectedIds.has(item.id);
-                const accountName = getAccountName(item.accountId);
+                const accountName = getAccountName(item);
 
                 return (
-                  <tr 
-                    key={item.id} 
+                  <tr
+                    key={item.id}
                     onClick={() => toggleSelectRow(item.id)}
                     className={`border-b border-slate-100 dark:border-slate-800 last:border-0 cursor-pointer transition-colors group ${isSelected ? 'bg-indigo-50 dark:bg-indigo-900/20' : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'}`}
                   >
                     <td className="px-4 py-4 text-center">
-                       <button 
-                         onClick={(e) => { e.stopPropagation(); toggleSelectRow(item.id); }}
-                         className={`transition-colors ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-300 dark:text-slate-600 hover:text-indigo-400'}`}
-                       >
-                         {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
-                       </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); toggleSelectRow(item.id); }}
+                        className={`transition-colors ${isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-300 dark:text-slate-600 hover:text-indigo-400'}`}
+                      >
+                        {isSelected ? <CheckSquare size={18} /> : <Square size={18} />}
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400 whitespace-nowrap font-mono text-xs">
                       {item.date.substring(5)}
@@ -268,17 +273,17 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                       </div>
                     </td>
                     <td className="px-6 py-4 hidden sm:table-cell" onClick={(e) => { e.stopPropagation(); onEdit(item); }}>
-                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-100 dark:border-slate-700/50 transition-colors">
-                         {item.type.replace('_', ' ')}
-                       </span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-100 dark:border-slate-700/50 transition-colors">
+                        {item.type.replace('_', ' ')}
+                      </span>
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell text-slate-500 dark:text-slate-400" onClick={(e) => { e.stopPropagation(); onEdit(item); }}>
-                       {accountName && (
-                         <div className="flex items-center gap-1.5 text-xs">
-                           <Wallet size={12} className="text-slate-300 dark:text-slate-600" />
-                           {accountName}
-                         </div>
-                       )}
+                      {accountName && (
+                        <div className="flex items-center gap-1.5 text-xs">
+                          <Wallet size={12} className="text-slate-300 dark:text-slate-600" />
+                          {accountName}
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400 hidden md:table-cell" onClick={(e) => { e.stopPropagation(); onEdit(item); }}>
                       <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 w-fit">

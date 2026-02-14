@@ -1,21 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  Legend 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend
 } from 'recharts';
-import { 
-  ChevronDown, 
-  ChevronUp, 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  PiggyBank, 
-  TrendingUp, 
+import {
+  ChevronDown,
+  ChevronUp,
+
+  PiggyBank,
+  TrendingUp,
   Calendar,
   MoreHorizontal
 } from 'lucide-react';
@@ -47,7 +46,7 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ items, s
     items.forEach(item => {
       // Safety check: skip if date is missing or not a string
       if (!item.date || typeof item.date !== 'string') return;
-      
+
       const monthKey = item.date.substring(0, 7); // YYYY-MM
       if (!months[monthKey]) {
         months[monthKey] = {
@@ -61,6 +60,8 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ items, s
       }
 
       const amount = Number(item.actualAmount) || 0;
+
+      if (item.type === TransactionType.TRANSFER) return; // Skip transfers in summary reports
 
       if (item.type === TransactionType.INCOME) {
         months[monthKey].income += amount;
@@ -91,8 +92,8 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ items, s
         const [y, month] = m.month.split('-');
         // Using day 15 is safer than day 1 for avoiding month-boundary timezone issues when formatting locally
         const dateObj = new Date(Number(y), Number(month) - 1, 15);
-        const formattedName = isNaN(dateObj.getTime()) 
-          ? m.month 
+        const formattedName = isNaN(dateObj.getTime())
+          ? m.month
           : dateObj.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
 
         return {
@@ -135,9 +136,9 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ items, s
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDarkMode ? "#334155" : "#f1f5f9"} />
-                <XAxis dataKey="name" tick={{fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12}} axisLine={false} tickLine={false} />
-                <YAxis tick={{fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12}} axisLine={false} tickLine={false} tickFormatter={(v) => `${symbol}${v}`} />
-                <Tooltip cursor={{fill: isDarkMode ? '#1e293b' : '#f8fafc'}} contentStyle={{backgroundColor: isDarkMode ? '#0f172a' : '#ffffff', borderRadius: '8px', border: 'none'}} />
+                <XAxis dataKey="name" tick={{ fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: isDarkMode ? '#94a3b8' : '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => `${symbol}${v}`} />
+                <Tooltip cursor={{ fill: isDarkMode ? '#1e293b' : '#f8fafc' }} contentStyle={{ backgroundColor: isDarkMode ? '#0f172a' : '#ffffff', borderRadius: '8px', border: 'none' }} />
                 <Legend iconType="circle" />
                 <Bar name="Income" dataKey="income" fill="#10B981" radius={[4, 4, 0, 0]} />
                 <Bar name="Expenses" dataKey="expenses" fill="#F43F5E" radius={[4, 4, 0, 0]} />
@@ -198,43 +199,43 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ items, s
                       <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Spending by Category</h5>
                       <div className="space-y-3">
                         {Object.entries(month.categoryBreakdown).sort((a, b) => Number(b[1]) - Number(a[1])).map(([name, amount]) => {
-                            const currentAmount = Number(amount);
-                            const totalExpenses = Number(month.expenses);
-                            const categoryPercent = totalExpenses > 0 ? (currentAmount / totalExpenses) * 100 : 0;
-                            return (
-                              <div key={name}>
-                                <div className="flex justify-between items-center mb-1.5">
-                                  <div className="flex items-center gap-2 text-sm"><span className="text-slate-400">{getCategoryIcon(name)}</span><span className="text-slate-700 dark:text-slate-300 font-medium">{name}</span></div>
-                                  <div className="text-right"><span className="text-sm font-bold text-slate-800 dark:text-slate-100">{symbol}{currentAmount.toLocaleString()}</span></div>
-                                </div>
-                                <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                  <div className="h-full bg-indigo-500/50 rounded-full" style={{ width: `${categoryPercent}%` }} />
-                                </div>
+                          const currentAmount = Number(amount);
+                          const totalExpenses = Number(month.expenses);
+                          const categoryPercent = totalExpenses > 0 ? (currentAmount / totalExpenses) * 100 : 0;
+                          return (
+                            <div key={name}>
+                              <div className="flex justify-between items-center mb-1.5">
+                                <div className="flex items-center gap-2 text-sm"><span className="text-slate-400">{getCategoryIcon(name)}</span><span className="text-slate-700 dark:text-slate-300 font-medium">{name}</span></div>
+                                <div className="text-right"><span className="text-sm font-bold text-slate-800 dark:text-slate-100">{symbol}{currentAmount.toLocaleString()}</span></div>
                               </div>
-                            );
+                              <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-indigo-500/50 rounded-full" style={{ width: `${categoryPercent}%` }} />
+                              </div>
+                            </div>
+                          );
                         })}
                       </div>
                     </div>
                     <div className="bg-slate-50 dark:bg-slate-800/30 p-4 rounded-2xl flex flex-col justify-between">
-                       <div>
-                         <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Savings Efficiency</h5>
-                         <div className="flex items-end gap-2 mb-2">
-                           <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{savingsPercent.toFixed(1)}%</span>
-                           <span className="text-xs text-slate-500 dark:text-slate-400 mb-1">of total income</span>
-                         </div>
-                         <p className="text-sm text-slate-600 dark:text-slate-300">
-                           {savingsPercent >= 20 ? 'Excellent! You are hitting the recommended savings rate.' : 
-                            savingsPercent >= 10 ? 'Good work, you are building your future wealth.' : 
-                            'Consider reviewing small daily expenses to increase your savings rate.'}
-                         </p>
-                       </div>
-                       <div className="mt-6 flex items-center gap-3">
-                         <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg"><PiggyBank size={20}/></div>
-                         <div>
-                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Assets Built</p>
-                           <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{symbol}{Number(month.savings).toLocaleString()}</p>
-                         </div>
-                       </div>
+                      <div>
+                        <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Savings Efficiency</h5>
+                        <div className="flex items-end gap-2 mb-2">
+                          <span className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{savingsPercent.toFixed(1)}%</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 mb-1">of total income</span>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-300">
+                          {savingsPercent >= 20 ? 'Excellent! You are hitting the recommended savings rate.' :
+                            savingsPercent >= 10 ? 'Good work, you are building your future wealth.' :
+                              'Consider reviewing small daily expenses to increase your savings rate.'}
+                        </p>
+                      </div>
+                      <div className="mt-6 flex items-center gap-3">
+                        <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg"><PiggyBank size={20} /></div>
+                        <div>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Assets Built</p>
+                          <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{symbol}{Number(month.savings).toLocaleString()}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
