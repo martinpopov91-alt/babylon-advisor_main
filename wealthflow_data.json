@@ -1,0 +1,643 @@
+{
+  "items": [
+    {
+      "id": "inc-1",
+      "name": "Salary (Main Job)",
+      "plannedAmount": 3036.98,
+      "actualAmount": 3036.98,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Base Salary",
+      "date": "2026-02-13",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2024-06-25"
+      },
+      "accountId": "default-checking"
+    },
+    {
+      "id": "inc-2",
+      "name": "Rollover from last month",
+      "plannedAmount": 111.31,
+      "actualAmount": 111.31,
+      "type": "INCOME",
+      "category": "Rollover",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "inc-3",
+      "name": "Food Vouchers",
+      "plannedAmount": 57.77,
+      "actualAmount": 57.77,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Benefits",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "inc-4",
+      "name": "Corporate Wellness",
+      "plannedAmount": 103.38,
+      "actualAmount": 103.38,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Benefits",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "sav-1",
+      "name": "Monthly Savings Transfer",
+      "plannedAmount": 331,
+      "actualAmount": 331,
+      "type": "SAVING",
+      "category": "General Savings",
+      "subCategory": "Emergency Fund",
+      "date": "2026-02-13",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2024-06-01"
+      },
+      "accountId": "default-checking"
+    },
+    {
+      "id": "sav-3",
+      "name": "Vacation Fund",
+      "plannedAmount": 78,
+      "actualAmount": 78,
+      "type": "SAVING",
+      "category": "Specific Goals",
+      "subCategory": "Vacation Fund",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "sav-4",
+      "name": "ETF Investment",
+      "plannedAmount": 52,
+      "actualAmount": 52,
+      "type": "SAVING",
+      "category": "Investments",
+      "subCategory": "ETFs",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "sav-5",
+      "name": "New Car Fund",
+      "plannedAmount": 60,
+      "actualAmount": 60,
+      "type": "SAVING",
+      "category": "Specific Goals",
+      "subCategory": "Car Fund",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "fix-1",
+      "name": "Mortgage Payment",
+      "plannedAmount": 984.7,
+      "actualAmount": 984.7,
+      "type": "FIXED_EXPENSE",
+      "category": "Housing",
+      "subCategory": "Mortgage",
+      "date": "2026-02-13",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2024-06-05"
+      },
+      "accountId": "default-checking"
+    },
+    {
+      "id": "fix-2",
+      "name": "Home Insurance",
+      "plannedAmount": 91.43,
+      "actualAmount": 91.43,
+      "type": "FIXED_EXPENSE",
+      "category": "Housing",
+      "subCategory": "Home Insurance",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "fix-3",
+      "name": "Charity / Tithe",
+      "plannedAmount": 331,
+      "actualAmount": 331,
+      "type": "FIXED_EXPENSE",
+      "category": "Gifts & Charity",
+      "subCategory": "Tithe",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "fix-7",
+      "name": "Electricity Bill",
+      "plannedAmount": 115.62,
+      "actualAmount": 115.62,
+      "type": "FIXED_EXPENSE",
+      "category": "Utilities",
+      "subCategory": "Electricity",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "var-1",
+      "name": "Coffee with friends",
+      "plannedAmount": 0,
+      "actualAmount": 5.58,
+      "type": "EXPENSE",
+      "category": "Coffee & Drinks",
+      "subCategory": "Coffee Shop",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "var-3",
+      "name": "Weekly Groceries",
+      "plannedAmount": 0,
+      "actualAmount": 45.63,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "var-11",
+      "name": "Gas Station",
+      "plannedAmount": 0,
+      "actualAmount": 57.86,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Fuel",
+      "date": "2026-02-13",
+      "accountId": "default-checking"
+    }
+  ],
+  "goals": [
+    {
+      "id": "goal-1",
+      "name": "Emergency Fund",
+      "targetAmount": 5000,
+      "initialAmount": 2000,
+      "category": "General Savings",
+      "subCategory": "Emergency Fund",
+      "color": "#10B981",
+      "deadline": "2024-12-31"
+    },
+    {
+      "id": "goal-2",
+      "name": "Summer Vacation",
+      "targetAmount": 2000,
+      "initialAmount": 500,
+      "category": "Specific Goals",
+      "subCategory": "Vacation Fund",
+      "color": "#F59E0B",
+      "deadline": "2024-07-01"
+    }
+  ],
+  "settings": {
+    "startDate": "2026-02-01",
+    "endDate": "2026-02-28",
+    "baseCurrency": "EUR"
+  },
+  "accounts": [
+    {
+      "id": "default-checking",
+      "name": "Main Checking",
+      "type": "CHECKING",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#6366F1",
+      "isDefault": true
+    },
+    {
+      "id": "default-cash",
+      "name": "Cash / Wallet",
+      "type": "CASH",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#10B981"
+    }
+  ],
+  "categories": [
+    {
+      "id": "Salary",
+      "name": "Salary",
+      "icon": "Briefcase",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Base Salary",
+        "Bonus",
+        "Overtime",
+        "Commission"
+      ]
+    },
+    {
+      "id": "Business",
+      "name": "Business & Freelance",
+      "icon": "Laptop",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Freelance",
+        "Consulting",
+        "Sales",
+        "Side Hustle"
+      ]
+    },
+    {
+      "id": "Passive",
+      "name": "Passive Income",
+      "icon": "TrendingUp",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Dividends",
+        "Interest",
+        "Rental Income",
+        "Crypto"
+      ]
+    },
+    {
+      "id": "GiftsInc",
+      "name": "Gifts & Refunds",
+      "icon": "Gift",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Tax Refund",
+        "Gift Received",
+        "Sold Items"
+      ]
+    },
+    {
+      "id": "Rollover",
+      "name": "Rollover",
+      "icon": "CircleDollarSign",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Previous Month"
+      ]
+    },
+    {
+      "id": "Housing",
+      "name": "Housing",
+      "icon": "Home",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Rent",
+        "Mortgage",
+        "Property Tax",
+        "Condo Fees",
+        "Home Insurance"
+      ]
+    },
+    {
+      "id": "Utilities",
+      "name": "Utilities",
+      "icon": "Zap",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Electricity",
+        "Water",
+        "Heating",
+        "Garbage",
+        "Gas"
+      ]
+    },
+    {
+      "id": "Digital",
+      "name": "Digital Services",
+      "icon": "Wifi",
+      "types": [
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Internet",
+        "Mobile Plan",
+        "Cloud Storage",
+        "Software Subscriptions",
+        "VPN"
+      ]
+    },
+    {
+      "id": "Insurance",
+      "name": "Insurance",
+      "icon": "Shield",
+      "types": [
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Life",
+        "Health",
+        "Disability",
+        "Legal"
+      ]
+    },
+    {
+      "id": "Debt",
+      "name": "Debt Repayment",
+      "icon": "CreditCard",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Credit Card",
+        "Student Loan",
+        "Personal Loan",
+        "Car Loan"
+      ]
+    },
+    {
+      "id": "Education",
+      "name": "Education",
+      "icon": "GraduationCap",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Tuition",
+        "Courses",
+        "Books",
+        "School Supplies"
+      ]
+    },
+    {
+      "id": "Groceries",
+      "name": "Groceries",
+      "icon": "ShoppingCart",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Supermarket",
+        "Market",
+        "Bakery",
+        "Butcher"
+      ]
+    },
+    {
+      "id": "Dining",
+      "name": "Dining Out",
+      "icon": "Utensils",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Restaurants",
+        "Fast Food",
+        "Delivery",
+        "Lunch"
+      ]
+    },
+    {
+      "id": "Drinks",
+      "name": "Coffee & Drinks",
+      "icon": "Coffee",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Coffee Shop",
+        "Bar",
+        "Alcohol",
+        "Clubs"
+      ]
+    },
+    {
+      "id": "Transport",
+      "name": "Transportation",
+      "icon": "Car",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Fuel",
+        "Public Transit",
+        "Taxi/Uber",
+        "Parking",
+        "Tolls",
+        "Car Wash",
+        "Maintenance",
+        "Car Insurance"
+      ]
+    },
+    {
+      "id": "Shopping",
+      "name": "Shopping",
+      "icon": "Shirt",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Clothing",
+        "Shoes",
+        "Electronics",
+        "Furniture",
+        "Home & Garden"
+      ]
+    },
+    {
+      "id": "Health",
+      "name": "Health & Wellness",
+      "icon": "Heart",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Pharmacy",
+        "Doctor",
+        "Dentist",
+        "Gym",
+        "Sports",
+        "Therapy",
+        "Vitamins"
+      ]
+    },
+    {
+      "id": "Personal",
+      "name": "Personal Care",
+      "icon": "Smile",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Hairdresser",
+        "Cosmetics",
+        "Spa",
+        "Barber",
+        "Hygiene"
+      ]
+    },
+    {
+      "id": "Entertainment",
+      "name": "Entertainment",
+      "icon": "Film",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Streaming (Netflix/Spotify)",
+        "Movies",
+        "Games",
+        "Concerts",
+        "Hobbies",
+        "Books"
+      ]
+    },
+    {
+      "id": "Travel",
+      "name": "Travel",
+      "icon": "Plane",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "subCategories": [
+        "Flights",
+        "Hotels",
+        "Airbnb",
+        "Activities",
+        "Souvenirs"
+      ]
+    },
+    {
+      "id": "Family",
+      "name": "Family & Kids",
+      "icon": "Baby",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Childcare",
+        "Toys",
+        "Baby Supplies",
+        "School Activities",
+        "Allowance"
+      ]
+    },
+    {
+      "id": "Pets",
+      "name": "Pets",
+      "icon": "PawPrint",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Vet",
+        "Pet Food",
+        "Toys",
+        "Grooming"
+      ]
+    },
+    {
+      "id": "Gifts",
+      "name": "Gifts & Charity",
+      "icon": "Gift",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Birthday",
+        "Holiday",
+        "Wedding",
+        "Charity",
+        "Donations"
+      ]
+    },
+    {
+      "id": "Maintenance",
+      "name": "Home Maintenance",
+      "icon": "Hammer",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Repairs",
+        "Renovation",
+        "Cleaning",
+        "Gardening",
+        "Tools"
+      ]
+    },
+    {
+      "id": "Savings",
+      "name": "General Savings",
+      "icon": "PiggyBank",
+      "types": [
+        "SAVING"
+      ],
+      "subCategories": [
+        "Emergency Fund",
+        "Rainy Day",
+        "Opportunity Fund"
+      ]
+    },
+    {
+      "id": "Investments",
+      "name": "Investments",
+      "icon": "TrendingUp",
+      "types": [
+        "SAVING"
+      ],
+      "subCategories": [
+        "Stocks",
+        "ETFs",
+        "Crypto",
+        "Real Estate",
+        "Bonds",
+        "Retirement"
+      ]
+    },
+    {
+      "id": "GoalSavings",
+      "name": "Specific Goals",
+      "icon": "TargetIcon",
+      "types": [
+        "SAVING"
+      ],
+      "subCategories": [
+        "Vacation Fund",
+        "Car Fund",
+        "Home Downpayment",
+        "Gadgets"
+      ]
+    },
+    {
+      "id": "Other",
+      "name": "Other",
+      "icon": "MoreHorizontal",
+      "types": [
+        "INCOME",
+        "EXPENSE",
+        "FIXED_EXPENSE",
+        "SAVING"
+      ]
+    }
+  ]
+}
