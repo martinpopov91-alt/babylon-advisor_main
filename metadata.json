@@ -1,0 +1,5 @@
+{
+  "name": "Babylon Advisor",
+  "description": "A personal finance budgeting app with AI-powered insights, tracking income, expenses, and savings goals using Gemini 3 Pro thinking capabilities.",
+  "requestFramePermissions": []
+}
