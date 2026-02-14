@@ -1,7 +1,310 @@
 {
   "items": [
     {
-      "name": "MetLife",
+      "name": "Телефон",
+      "date": "2026-02-14",
+      "actualAmount": 18.79,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Phone",
+      "accountId": "default-checking",
+      "id": "man-1771078577683"
+    },
+    {
+      "name": "Интернет",
+      "date": "2026-02-14",
+      "actualAmount": 12.92,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Home Internet",
+      "accountId": "default-checking",
+      "id": "man-1771078551729"
+    },
+    {
+      "name": "Входна такса",
+      "date": "2026-02-16",
+      "actualAmount": 0,
+      "plannedAmount": 984.7,
+      "type": "EXPENSE",
+      "category": "Housing",
+      "subCategory": "Condo Fees",
+      "accountId": "default-checking",
+      "id": "man-1771078361922"
+    },
+    {
+      "name": "EVN",
+      "date": "2026-02-15",
+      "actualAmount": 0,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Utilities",
+      "subCategory": "Electricity",
+      "accountId": "default-checking",
+      "id": "man-1771078314759"
+    },
+    {
+      "name": "Diferenc",
+      "date": "2026-02-14",
+      "actualAmount": 2,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771077997817"
+    },
+    {
+      "name": "lidl bag",
+      "date": "2026-02-13",
+      "actualAmount": 0.18,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771061920547",
+      "id": "man-1771077840935"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-13",
+      "actualAmount": 29.05,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771061920547",
+      "id": "man-1771077810282"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-11",
+      "actualAmount": 18.36,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771061920547",
+      "id": "man-1771077780819"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-14",
+      "actualAmount": 7.89,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077681438"
+    },
+    {
+      "name": "Fantastico",
+      "date": "2026-02-14",
+      "actualAmount": 40.04,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077596344"
+    },
+    {
+      "name": "Bila",
+      "date": "2026-02-14",
+      "actualAmount": 8.59,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077476968"
+    },
+    {
+      "name": "Clothing",
+      "date": "2026-02-13",
+      "actualAmount": 21.55,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Clothing",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077413323"
+    },
+    {
+      "name": "Clothing",
+      "date": "2026-02-13",
+      "actualAmount": 95.03,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Clothing",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077341789"
+    },
+    {
+      "name": "Муло Gift",
+      "date": "2026-02-13",
+      "actualAmount": 14.14,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Gifts & Charity",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077270020"
+    },
+    {
+      "name": "Temu",
+      "date": "2026-02-12",
+      "actualAmount": 18.46,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Home & Garden",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077166754"
+    },
+    {
+      "name": "Mr.Bricolage",
+      "date": "2026-02-11",
+      "actualAmount": 5.1,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Home Maintenance",
+      "subCategory": "Repairs",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077126150"
+    },
+    {
+      "name": "Green Clean",
+      "date": "2026-02-11",
+      "actualAmount": 5.4,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Clothing",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077084446"
+    },
+    {
+      "name": "Lunch Home",
+      "date": "2026-02-11",
+      "actualAmount": 17.6,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "subCategory": "Lunch",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771076964467"
+    },
+    {
+      "name": "Barber",
+      "date": "2026-02-12",
+      "actualAmount": 18,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Personal Care",
+      "subCategory": "Barber",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771076886053"
+    },
+    {
+      "name": "Skoda Diesel",
+      "date": "2026-02-14",
+      "actualAmount": 43.9,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Fuel",
+      "accountId": "acc-1771060428281",
+      "id": "man-1771076775699"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-14",
+      "actualAmount": 40,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "acc-1771060428281",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771076708111"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-14",
+      "actualAmount": 20,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771076666845"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-13",
+      "actualAmount": 100,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771076645227"
+    },
+    {
+      "name": "Пастори",
+      "date": "2026-02-12",
+      "actualAmount": 100,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Gifts & Charity",
+      "subCategory": "Donations",
+      "accountId": "default-checking",
+      "id": "man-1771072966956"
+    },
+    {
+      "name": "Klear",
+      "date": "2026-02-13",
+      "actualAmount": 10,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771072875931"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-11",
+      "actualAmount": 100,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771072266764"
+    },
+    {
+      "name": "Credit Card",
+      "date": "2026-02-12",
+      "actualAmount": 1.54,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Debt Repayment",
+      "subCategory": "Credit Card",
+      "accountId": "default-checking",
+      "id": "man-1771072178814"
+    },
+    {
+      "name": "Credit Card",
+      "date": "2026-02-12",
+      "actualAmount": 83.98,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "subCategory": "Credit Card",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060428281",
+      "id": "man-1771072051272"
+    },
+    {
+      "name": "MetLife за Март",
       "date": "2026-02-14",
       "actualAmount": 122.98,
       "plannedAmount": 0,
@@ -11,7 +314,7 @@
       "id": "man-1771062997639"
     },
     {
-      "name": "Застраховка ДСК",
+      "name": "Застраховка ДСК за Март",
       "date": "2026-02-14",
       "actualAmount": 91.43,
       "plannedAmount": 0,
@@ -21,7 +324,7 @@
       "id": "man-1771062957077"
     },
     {
-      "name": "Кредити ипотечен ДСК",
+      "name": "Кредити ипотечен ДСК за Март",
       "date": "2026-02-14",
       "actualAmount": 984.7,
       "plannedAmount": 0,
@@ -173,6 +476,36 @@
       "subCategory": "Base Salary",
       "accountId": "default-checking",
       "id": "man-1771060516377"
+    },
+    {
+      "id": "budget-1771079072375",
+      "name": "Dining Out Budget",
+      "plannedAmount": 100,
+      "actualAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "date": "2026-02-10",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "budget-1771079084739",
+      "name": "Groceries Budget",
+      "plannedAmount": 280,
+      "actualAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "date": "2026-02-10",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "budget-1771079119976",
+      "name": "Shopping Budget",
+      "plannedAmount": 100,
+      "actualAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "date": "2026-02-10",
+      "accountId": "default-checking"
     }
   ],
   "goals": [
@@ -235,8 +568,8 @@
     }
   ],
   "settings": {
-    "startDate": "2026-02-01",
-    "endDate": "2026-02-28",
+    "startDate": "2026-02-10",
+    "endDate": "2026-03-10",
     "baseCurrency": "EUR"
   },
   "accounts": [
@@ -758,6 +1091,33 @@
       "types": [
         "EXPENSE",
         "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771072253793",
+      "name": "Trading 212",
+      "icon": "Banknote",
+      "types": [
+        "EXPENSE"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771078168314",
+      "name": "Home Internet",
+      "icon": "Wifi",
+      "types": [
+        "EXPENSE"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771078177221",
+      "name": "Phone",
+      "icon": "Smartphone",
+      "types": [
+        "EXPENSE"
       ],
       "isCustom": true
     }
