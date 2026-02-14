@@ -1,25 +1,237 @@
 {
-  "items": [],
-  "goals": [
+  "items": [
     {
-      "id": "goal-1",
-      "name": "Emergency Fund",
-      "targetAmount": 5000,
-      "initialAmount": 2000,
-      "category": "General Savings",
-      "subCategory": "Emergency Fund",
-      "color": "#10B981",
-      "deadline": "2024-12-31"
+      "name": "MetLife",
+      "date": "2026-02-14",
+      "actualAmount": 122.98,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771062997639"
     },
     {
-      "id": "goal-2",
-      "name": "Summer Vacation",
-      "targetAmount": 2000,
-      "initialAmount": 500,
-      "category": "Specific Goals",
-      "subCategory": "Vacation Fund",
+      "name": "Застраховка ДСК",
+      "date": "2026-02-14",
+      "actualAmount": 91.43,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771062957077"
+    },
+    {
+      "name": "Кредити ипотечен ДСК",
+      "date": "2026-02-14",
+      "actualAmount": 984.7,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Housing",
+      "subCategory": "Mortgage",
+      "accountId": "default-checking",
+      "id": "man-1771062765557"
+    },
+    {
+      "name": "Vault - Car service",
+      "date": "2026-02-14",
+      "actualAmount": 30,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Car service",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062203211"
+    },
+    {
+      "name": "Vault - Taxes",
+      "date": "2026-02-14",
+      "actualAmount": 13,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Taxes",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062189290"
+    },
+    {
+      "name": "Vault - Pay Yourself First",
+      "date": "2026-02-14",
+      "actualAmount": 52,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Pay Yourself First",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062174706"
+    },
+    {
+      "name": "Vault - Car payments",
+      "date": "2026-02-14",
+      "actualAmount": 60,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Car payments",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062156324"
+    },
+    {
+      "name": "Vault - Investment",
+      "date": "2026-02-14",
+      "actualAmount": 52,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Investment",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062136212"
+    },
+    {
+      "name": "Vault - Vacations",
+      "date": "2026-02-14",
+      "actualAmount": 78,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Vacations",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062118960"
+    },
+    {
+      "name": "Savings DSK",
+      "date": "2026-02-14",
+      "actualAmount": 320,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "General Savings",
+      "subCategory": "Opportunity Fund",
+      "accountId": "default-checking",
+      "id": "man-1771062012043"
+    },
+    {
+      "name": "Food Vouchers",
+      "date": "2026-02-10",
+      "actualAmount": 57.77,
+      "plannedAmount": 0,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Bonus",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-10"
+      },
+      "accountId": "acc-1771061920547",
+      "id": "man-1771061956110"
+    },
+    {
+      "name": "Десятък 10%",
+      "date": "2026-02-14",
+      "actualAmount": 320,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Gifts & Charity",
+      "subCategory": "Donations",
+      "accountId": "default-checking",
+      "id": "man-1771061688126"
+    },
+    {
+      "name": "Previous Month",
+      "date": "2026-02-10",
+      "actualAmount": 8.07,
+      "plannedAmount": 0,
+      "type": "INCOME",
+      "category": "Rollover",
+      "subCategory": "Previous Month",
+      "accountId": "default-checking",
+      "id": "man-1771060550591"
+    },
+    {
+      "name": "Salary",
+      "date": "2026-02-10",
+      "actualAmount": 3036.97,
+      "plannedAmount": 0,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Base Salary",
+      "accountId": "default-checking",
+      "id": "man-1771060516377"
+    }
+  ],
+  "goals": [
+    {
+      "name": "Savings DSK",
+      "targetAmount": 0,
+      "initialAmount": 871.6,
+      "category": "General Savings",
+      "subCategory": "Opportunity Fund",
+      "color": "#10B981",
+      "id": "goal-1"
+    },
+    {
+      "name": "Vault - Vacations",
+      "targetAmount": 0,
+      "initialAmount": 640,
+      "category": "Vault - Vacations",
       "color": "#F59E0B",
-      "deadline": "2024-07-01"
+      "id": "goal-1771061321649"
+    },
+    {
+      "name": "Vault - Investment",
+      "targetAmount": 0,
+      "initialAmount": 210,
+      "category": "Vault - Investment",
+      "color": "#64748B",
+      "id": "goal-1771061337685"
+    },
+    {
+      "name": "Vault - Car payments",
+      "targetAmount": 0,
+      "initialAmount": 950,
+      "category": "Vault - Car payments",
+      "color": "#F59E0B",
+      "id": "goal-1771061351631"
+    },
+    {
+      "name": "Vault - Pay Yourself First",
+      "targetAmount": 0,
+      "initialAmount": 3.12,
+      "category": "Vault - Pay Yourself First",
+      "color": "#3B82F6",
+      "id": "goal-1771061362701"
+    },
+    {
+      "name": "Vault - Taxes",
+      "targetAmount": 0,
+      "initialAmount": 250,
+      "category": "Vault - Taxes",
+      "color": "#64748B",
+      "id": "goal-1771061377160"
+    },
+    {
+      "name": "Vault - Car service",
+      "targetAmount": 0,
+      "initialAmount": 110,
+      "category": "Vault - Car service",
+      "color": "#F59E0B",
+      "id": "goal-1771061387449"
     }
   ],
   "settings": {
@@ -29,12 +241,12 @@
   },
   "accounts": [
     {
-      "id": "default-checking",
-      "name": "Main Checking",
+      "name": "Debit Card",
       "type": "CHECKING",
       "initialBalance": 0,
       "currency": "EUR",
-      "color": "#6366F1",
+      "color": "#10B981",
+      "id": "default-checking",
       "isDefault": true
     },
     {
@@ -44,6 +256,33 @@
       "initialBalance": 0,
       "currency": "EUR",
       "color": "#10B981"
+    },
+    {
+      "name": "Credit Card",
+      "type": "CREDIT_CARD",
+      "initialBalance": 416.02,
+      "currency": "EUR",
+      "color": "#EF4444",
+      "id": "acc-1771060428281",
+      "isDefault": false
+    },
+    {
+      "name": "Trading 212",
+      "type": "CHECKING",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#14B8A6",
+      "id": "acc-1771060451285",
+      "isDefault": false
+    },
+    {
+      "name": "Food Vouchers",
+      "type": "CHECKING",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#3B82F6",
+      "id": "acc-1771061920547",
+      "isDefault": false
     }
   ],
   "categories": [
@@ -461,6 +700,66 @@
         "FIXED_EXPENSE",
         "SAVING"
       ]
+    },
+    {
+      "id": "custom-1771061161628",
+      "name": "Vault - Vacations",
+      "icon": "Briefcase",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061184577",
+      "name": "Vault - Investment",
+      "icon": "CircleDollarSign",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061208806",
+      "name": "Vault - Car payments",
+      "icon": "Bus",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061228680",
+      "name": "Vault - Pay Yourself First",
+      "icon": "PiggyBank",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061238424",
+      "name": "Vault - Taxes",
+      "icon": "Landmark",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061253355",
+      "name": "Vault - Car service",
+      "icon": "Bus",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
     }
   ]
 }
