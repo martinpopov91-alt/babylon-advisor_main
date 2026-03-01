@@ -1,0 +1,1366 @@
+{
+  "items": [
+    {
+      "name": "DM",
+      "date": "2026-02-18",
+      "actualAmount": 10.26,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Home & Garden",
+      "accountId": "default-checking",
+      "id": "man-1772040741269"
+    },
+    {
+      "name": "Praking",
+      "date": "2026-02-19",
+      "actualAmount": 1.5,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Parking",
+      "accountId": "default-checking",
+      "id": "man-1772040689650"
+    },
+    {
+      "name": "Spotify",
+      "date": "2026-02-19",
+      "actualAmount": 7.92,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Entertainment",
+      "subCategory": "Streaming (Netflix/Spotify)",
+      "accountId": "default-checking",
+      "id": "man-1772040554476"
+    },
+    {
+      "name": "Skoda - Desel",
+      "date": "2026-02-20",
+      "actualAmount": 35.99,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Fuel",
+      "accountId": "default-checking",
+      "id": "man-1772040513876"
+    },
+    {
+      "name": "Kaufland",
+      "date": "2026-02-24",
+      "actualAmount": 14.13,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "default-checking",
+      "id": "man-1772040364210"
+    },
+    {
+      "name": "Ядки",
+      "date": "2026-02-24",
+      "actualAmount": 2.2,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "subCategory": "Lunch",
+      "accountId": "default-checking",
+      "id": "man-1772040337666"
+    },
+    {
+      "name": "SKARAVA",
+      "date": "2026-02-24",
+      "actualAmount": 10.1,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "subCategory": "Fast Food",
+      "accountId": "default-checking",
+      "id": "man-1772039506336"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-21",
+      "actualAmount": 12.83,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "accountId": "default-checking",
+      "id": "man-1772039122992"
+    },
+    {
+      "name": "ENDY",
+      "date": "2026-02-21",
+      "actualAmount": 12.08,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Home & Garden",
+      "accountId": "default-checking",
+      "id": "man-1772038798309"
+    },
+    {
+      "name": "Kaufland",
+      "date": "2026-02-21",
+      "actualAmount": 28.92,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "default-checking",
+      "id": "man-1772038655659"
+    },
+    {
+      "name": "Econt - Deta",
+      "date": "2026-02-21",
+      "actualAmount": 33.12,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Maintenance",
+      "accountId": "default-checking",
+      "id": "man-1772038631275"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-19",
+      "actualAmount": 50.66,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "default-checking",
+      "id": "man-1772038394900"
+    },
+    {
+      "name": "МВР",
+      "date": "2026-02-19",
+      "actualAmount": 6.14,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Tolls",
+      "accountId": "default-checking",
+      "id": "man-1772038283305"
+    },
+    {
+      "name": "SPEEDY9 - Coffee - Dabov",
+      "date": "2026-02-18",
+      "actualAmount": 40.95,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Market",
+      "accountId": "default-checking",
+      "id": "man-1772037974928"
+    },
+    {
+      "name": "Скара Танкист",
+      "date": "2026-02-18",
+      "actualAmount": 8.3,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "subCategory": "Fast Food",
+      "accountId": "default-checking",
+      "id": "man-1772037934815"
+    },
+    {
+      "name": "MAB STO - Coffee",
+      "date": "2026-02-17",
+      "actualAmount": 14.28,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Market",
+      "accountId": "default-checking",
+      "id": "man-1772037848883"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-17",
+      "actualAmount": 47.75,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "default-checking",
+      "id": "man-1772037778184"
+    },
+    {
+      "name": "Kaufland",
+      "date": "2026-02-17",
+      "actualAmount": 20.44,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "default-checking",
+      "id": "man-1772037559916"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-16",
+      "actualAmount": 27.58,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "default-checking",
+      "id": "man-1772037415130"
+    },
+    {
+      "name": "Technopolis",
+      "date": "2026-02-16",
+      "actualAmount": 66.1,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Electronics",
+      "accountId": "default-checking",
+      "id": "man-1772037349580"
+    },
+    {
+      "name": "Скара Танкист",
+      "date": "2026-02-16",
+      "actualAmount": 9.2,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "subCategory": "Lunch",
+      "accountId": "default-checking",
+      "id": "man-1772037220003"
+    },
+    {
+      "name": "Sopharma",
+      "date": "2026-02-15",
+      "actualAmount": 12.83,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Health & Wellness",
+      "subCategory": "Pharmacy",
+      "accountId": "default-checking",
+      "id": "man-1772037078839"
+    },
+    {
+      "name": "Телефон",
+      "date": "2026-02-14",
+      "actualAmount": 18.79,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Phone",
+      "accountId": "default-checking",
+      "id": "man-1771078577683"
+    },
+    {
+      "name": "Интернет",
+      "date": "2026-02-14",
+      "actualAmount": 12.92,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Home Internet",
+      "accountId": "default-checking",
+      "id": "man-1771078551729"
+    },
+    {
+      "name": "Входна такса",
+      "date": "2026-02-16",
+      "actualAmount": 0,
+      "plannedAmount": 984.7,
+      "type": "EXPENSE",
+      "category": "Housing",
+      "subCategory": "Condo Fees",
+      "accountId": "default-checking",
+      "id": "man-1771078361922"
+    },
+    {
+      "name": "EVN",
+      "date": "2026-02-15",
+      "actualAmount": 0,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Utilities",
+      "subCategory": "Electricity",
+      "accountId": "default-checking",
+      "id": "man-1771078314759"
+    },
+    {
+      "name": "Diferenc",
+      "date": "2026-02-14",
+      "actualAmount": 2,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771077997817"
+    },
+    {
+      "name": "lidl bag",
+      "date": "2026-02-13",
+      "actualAmount": 0.18,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771061920547",
+      "id": "man-1771077840935"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-13",
+      "actualAmount": 29.05,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771061920547",
+      "id": "man-1771077810282"
+    },
+    {
+      "name": "Lidl",
+      "date": "2026-02-11",
+      "actualAmount": 18.36,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771061920547",
+      "id": "man-1771077780819"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-14",
+      "actualAmount": 7.89,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077681438"
+    },
+    {
+      "name": "Fantastico",
+      "date": "2026-02-14",
+      "actualAmount": 40.04,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077596344"
+    },
+    {
+      "name": "Bila",
+      "date": "2026-02-14",
+      "actualAmount": 8.59,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "subCategory": "Supermarket",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077476968"
+    },
+    {
+      "name": "Clothing",
+      "date": "2026-02-13",
+      "actualAmount": 21.55,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Clothing",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077413323"
+    },
+    {
+      "name": "Clothing",
+      "date": "2026-02-13",
+      "actualAmount": 95.03,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Clothing",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077341789"
+    },
+    {
+      "name": "Муло Gift",
+      "date": "2026-02-13",
+      "actualAmount": 14.14,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Gifts & Charity",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077270020"
+    },
+    {
+      "name": "Temu",
+      "date": "2026-02-12",
+      "actualAmount": 18.46,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Home & Garden",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077166754"
+    },
+    {
+      "name": "Mr.Bricolage",
+      "date": "2026-02-11",
+      "actualAmount": 5.1,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Home Maintenance",
+      "subCategory": "Repairs",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077126150"
+    },
+    {
+      "name": "Green Clean",
+      "date": "2026-02-11",
+      "actualAmount": 5.4,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "subCategory": "Clothing",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771077084446"
+    },
+    {
+      "name": "Lunch Home",
+      "date": "2026-02-11",
+      "actualAmount": 17.6,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "subCategory": "Lunch",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771076964467"
+    },
+    {
+      "name": "Barber",
+      "date": "2026-02-12",
+      "actualAmount": 18,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Personal Care",
+      "subCategory": "Barber",
+      "accountId": "acc-1771060451285",
+      "id": "man-1771076886053"
+    },
+    {
+      "name": "Skoda Diesel",
+      "date": "2026-02-14",
+      "actualAmount": 43.9,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Transportation",
+      "subCategory": "Fuel",
+      "accountId": "acc-1771060428281",
+      "id": "man-1771076775699"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-14",
+      "actualAmount": 40,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "acc-1771060428281",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771076708111"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-14",
+      "actualAmount": 20,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771076666845"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-13",
+      "actualAmount": 100,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771076645227"
+    },
+    {
+      "name": "Пастори",
+      "date": "2026-02-12",
+      "actualAmount": 100,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Gifts & Charity",
+      "subCategory": "Donations",
+      "accountId": "default-checking",
+      "id": "man-1771072966956"
+    },
+    {
+      "name": "Klear",
+      "date": "2026-02-13",
+      "actualAmount": 10,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771072875931"
+    },
+    {
+      "name": "Trading 212",
+      "date": "2026-02-11",
+      "actualAmount": 100,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060451285",
+      "id": "man-1771072266764"
+    },
+    {
+      "name": "Credit Card",
+      "date": "2026-02-12",
+      "actualAmount": 1.54,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Debt Repayment",
+      "subCategory": "Credit Card",
+      "accountId": "default-checking",
+      "id": "man-1771072178814"
+    },
+    {
+      "name": "Credit Card",
+      "date": "2026-02-12",
+      "actualAmount": 83.98,
+      "plannedAmount": 0,
+      "type": "TRANSFER",
+      "category": "Transfer",
+      "subCategory": "Credit Card",
+      "accountId": "default-checking",
+      "toAccountId": "acc-1771060428281",
+      "id": "man-1771072051272"
+    },
+    {
+      "name": "MetLife за Март",
+      "date": "2026-02-14",
+      "actualAmount": 122.98,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771062997639"
+    },
+    {
+      "name": "Застраховка ДСК за Март",
+      "date": "2026-02-14",
+      "actualAmount": 91.43,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Other",
+      "accountId": "default-checking",
+      "id": "man-1771062957077"
+    },
+    {
+      "name": "Кредити ипотечен ДСК за Март",
+      "date": "2026-02-14",
+      "actualAmount": 984.7,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Housing",
+      "subCategory": "Mortgage",
+      "accountId": "default-checking",
+      "id": "man-1771062765557"
+    },
+    {
+      "name": "Vault - Car service",
+      "date": "2026-02-14",
+      "actualAmount": 30,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Car service",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062203211"
+    },
+    {
+      "name": "Vault - Taxes",
+      "date": "2026-02-14",
+      "actualAmount": 13,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Taxes",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062189290"
+    },
+    {
+      "name": "Vault - Pay Yourself First",
+      "date": "2026-02-14",
+      "actualAmount": 52,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Pay Yourself First",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062174706"
+    },
+    {
+      "name": "Vault - Car payments",
+      "date": "2026-02-14",
+      "actualAmount": 60,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Car payments",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062156324"
+    },
+    {
+      "name": "Vault - Investment",
+      "date": "2026-02-14",
+      "actualAmount": 52,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Investment",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062136212"
+    },
+    {
+      "name": "Vault - Vacations",
+      "date": "2026-02-14",
+      "actualAmount": 78,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "Vault - Vacations",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-14"
+      },
+      "accountId": "default-checking",
+      "id": "man-1771062118960"
+    },
+    {
+      "name": "Savings DSK",
+      "date": "2026-02-14",
+      "actualAmount": 320,
+      "plannedAmount": 0,
+      "type": "SAVING",
+      "category": "General Savings",
+      "subCategory": "Opportunity Fund",
+      "accountId": "default-checking",
+      "id": "man-1771062012043"
+    },
+    {
+      "name": "Food Vouchers",
+      "date": "2026-02-10",
+      "actualAmount": 57.77,
+      "plannedAmount": 0,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Bonus",
+      "recurrence": {
+        "frequency": "MONTHLY",
+        "nextDate": "2026-03-10"
+      },
+      "accountId": "acc-1771061920547",
+      "id": "man-1771061956110"
+    },
+    {
+      "name": "Десятък 10%",
+      "date": "2026-02-14",
+      "actualAmount": 320,
+      "plannedAmount": 0,
+      "type": "EXPENSE",
+      "category": "Gifts & Charity",
+      "subCategory": "Donations",
+      "accountId": "default-checking",
+      "id": "man-1771061688126"
+    },
+    {
+      "name": "Previous Month",
+      "date": "2026-02-10",
+      "actualAmount": 8.07,
+      "plannedAmount": 0,
+      "type": "INCOME",
+      "category": "Rollover",
+      "subCategory": "Previous Month",
+      "accountId": "default-checking",
+      "id": "man-1771060550591"
+    },
+    {
+      "name": "Salary",
+      "date": "2026-02-10",
+      "actualAmount": 3036.97,
+      "plannedAmount": 0,
+      "type": "INCOME",
+      "category": "Salary",
+      "subCategory": "Base Salary",
+      "accountId": "default-checking",
+      "id": "man-1771060516377"
+    },
+    {
+      "id": "budget-1771079072375",
+      "name": "Dining Out Budget",
+      "plannedAmount": 100,
+      "actualAmount": 0,
+      "type": "EXPENSE",
+      "category": "Dining Out",
+      "date": "2026-02-10",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "budget-1771079084739",
+      "name": "Groceries Budget",
+      "plannedAmount": 280,
+      "actualAmount": 0,
+      "type": "EXPENSE",
+      "category": "Groceries",
+      "date": "2026-02-10",
+      "accountId": "default-checking"
+    },
+    {
+      "id": "budget-1771079119976",
+      "name": "Shopping Budget",
+      "plannedAmount": 100,
+      "actualAmount": 0,
+      "type": "EXPENSE",
+      "category": "Shopping",
+      "date": "2026-02-10",
+      "accountId": "default-checking"
+    }
+  ],
+  "goals": [
+    {
+      "name": "Savings DSK",
+      "targetAmount": 0,
+      "initialAmount": 871.6,
+      "category": "General Savings",
+      "subCategory": "Opportunity Fund",
+      "color": "#10B981",
+      "id": "goal-1"
+    },
+    {
+      "name": "Vault - Vacations",
+      "targetAmount": 0,
+      "initialAmount": 640,
+      "category": "Vault - Vacations",
+      "color": "#F59E0B",
+      "id": "goal-1771061321649"
+    },
+    {
+      "name": "Vault - Investment",
+      "targetAmount": 0,
+      "initialAmount": 210,
+      "category": "Vault - Investment",
+      "color": "#64748B",
+      "id": "goal-1771061337685"
+    },
+    {
+      "name": "Vault - Car payments",
+      "targetAmount": 0,
+      "initialAmount": 950,
+      "category": "Vault - Car payments",
+      "color": "#F59E0B",
+      "id": "goal-1771061351631"
+    },
+    {
+      "name": "Vault - Pay Yourself First",
+      "targetAmount": 0,
+      "initialAmount": 3.12,
+      "category": "Vault - Pay Yourself First",
+      "color": "#3B82F6",
+      "id": "goal-1771061362701"
+    },
+    {
+      "name": "Vault - Taxes",
+      "targetAmount": 0,
+      "initialAmount": 250,
+      "category": "Vault - Taxes",
+      "color": "#64748B",
+      "id": "goal-1771061377160"
+    },
+    {
+      "name": "Vault - Car service",
+      "targetAmount": 0,
+      "initialAmount": 110,
+      "category": "Vault - Car service",
+      "color": "#F59E0B",
+      "id": "goal-1771061387449"
+    }
+  ],
+  "settings": {
+    "startDate": "2026-02-10",
+    "endDate": "2026-03-10",
+    "baseCurrency": "EUR"
+  },
+  "accounts": [
+    {
+      "name": "Debit Card",
+      "type": "CHECKING",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#10B981",
+      "id": "default-checking",
+      "isDefault": true
+    },
+    {
+      "id": "default-cash",
+      "name": "Cash / Wallet",
+      "type": "CASH",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#10B981"
+    },
+    {
+      "name": "Credit Card",
+      "type": "CREDIT_CARD",
+      "initialBalance": 416.02,
+      "currency": "EUR",
+      "color": "#EF4444",
+      "id": "acc-1771060428281",
+      "isDefault": false
+    },
+    {
+      "name": "Trading 212",
+      "type": "CHECKING",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#14B8A6",
+      "id": "acc-1771060451285",
+      "isDefault": false
+    },
+    {
+      "name": "Food Vouchers",
+      "type": "CHECKING",
+      "initialBalance": 0,
+      "currency": "EUR",
+      "color": "#3B82F6",
+      "id": "acc-1771061920547",
+      "isDefault": false
+    }
+  ],
+  "categories": [
+    {
+      "id": "Salary",
+      "name": "Salary",
+      "icon": "Briefcase",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Base Salary",
+        "Bonus",
+        "Overtime",
+        "Commission"
+      ]
+    },
+    {
+      "id": "Business",
+      "name": "Business & Freelance",
+      "icon": "Laptop",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Freelance",
+        "Consulting",
+        "Sales",
+        "Side Hustle"
+      ]
+    },
+    {
+      "id": "Passive",
+      "name": "Passive Income",
+      "icon": "TrendingUp",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Dividends",
+        "Interest",
+        "Rental Income",
+        "Crypto"
+      ]
+    },
+    {
+      "id": "GiftsInc",
+      "name": "Gifts & Refunds",
+      "icon": "Gift",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Tax Refund",
+        "Gift Received",
+        "Sold Items"
+      ]
+    },
+    {
+      "id": "Rollover",
+      "name": "Rollover",
+      "icon": "CircleDollarSign",
+      "types": [
+        "INCOME"
+      ],
+      "subCategories": [
+        "Previous Month"
+      ]
+    },
+    {
+      "id": "Housing",
+      "name": "Housing",
+      "icon": "Home",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Rent",
+        "Mortgage",
+        "Property Tax",
+        "Condo Fees",
+        "Home Insurance"
+      ]
+    },
+    {
+      "id": "Utilities",
+      "name": "Utilities",
+      "icon": "Zap",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Electricity",
+        "Water",
+        "Heating",
+        "Garbage",
+        "Gas"
+      ]
+    },
+    {
+      "id": "Digital",
+      "name": "Digital Services",
+      "icon": "Wifi",
+      "types": [
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Internet",
+        "Mobile Plan",
+        "Cloud Storage",
+        "Software Subscriptions",
+        "VPN"
+      ]
+    },
+    {
+      "id": "Insurance",
+      "name": "Insurance",
+      "icon": "Shield",
+      "types": [
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Life",
+        "Health",
+        "Disability",
+        "Legal"
+      ]
+    },
+    {
+      "id": "Debt",
+      "name": "Debt Repayment",
+      "icon": "CreditCard",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Credit Card",
+        "Student Loan",
+        "Personal Loan",
+        "Car Loan"
+      ]
+    },
+    {
+      "id": "Education",
+      "name": "Education",
+      "icon": "GraduationCap",
+      "types": [
+        "FIXED_EXPENSE",
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Tuition",
+        "Courses",
+        "Books",
+        "School Supplies"
+      ]
+    },
+    {
+      "id": "Groceries",
+      "name": "Groceries",
+      "icon": "ShoppingCart",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Supermarket",
+        "Market",
+        "Bakery",
+        "Butcher"
+      ]
+    },
+    {
+      "id": "Dining",
+      "name": "Dining Out",
+      "icon": "Utensils",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Restaurants",
+        "Fast Food",
+        "Delivery",
+        "Lunch"
+      ]
+    },
+    {
+      "id": "Drinks",
+      "name": "Coffee & Drinks",
+      "icon": "Coffee",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Coffee Shop",
+        "Bar",
+        "Alcohol",
+        "Clubs"
+      ]
+    },
+    {
+      "id": "Transport",
+      "name": "Transportation",
+      "icon": "Car",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Fuel",
+        "Public Transit",
+        "Taxi/Uber",
+        "Parking",
+        "Tolls",
+        "Car Wash",
+        "Maintenance",
+        "Car Insurance"
+      ]
+    },
+    {
+      "id": "Shopping",
+      "name": "Shopping",
+      "icon": "Shirt",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Clothing",
+        "Shoes",
+        "Electronics",
+        "Furniture",
+        "Home & Garden"
+      ]
+    },
+    {
+      "id": "Health",
+      "name": "Health & Wellness",
+      "icon": "Heart",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Pharmacy",
+        "Doctor",
+        "Dentist",
+        "Gym",
+        "Sports",
+        "Therapy",
+        "Vitamins"
+      ]
+    },
+    {
+      "id": "Personal",
+      "name": "Personal Care",
+      "icon": "Smile",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Hairdresser",
+        "Cosmetics",
+        "Spa",
+        "Barber",
+        "Hygiene"
+      ]
+    },
+    {
+      "id": "Entertainment",
+      "name": "Entertainment",
+      "icon": "Film",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Streaming (Netflix/Spotify)",
+        "Movies",
+        "Games",
+        "Concerts",
+        "Hobbies",
+        "Books"
+      ]
+    },
+    {
+      "id": "Travel",
+      "name": "Travel",
+      "icon": "Plane",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "subCategories": [
+        "Flights",
+        "Hotels",
+        "Airbnb",
+        "Activities",
+        "Souvenirs"
+      ]
+    },
+    {
+      "id": "Family",
+      "name": "Family & Kids",
+      "icon": "Baby",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Childcare",
+        "Toys",
+        "Baby Supplies",
+        "School Activities",
+        "Allowance"
+      ]
+    },
+    {
+      "id": "Pets",
+      "name": "Pets",
+      "icon": "PawPrint",
+      "types": [
+        "EXPENSE"
+      ],
+      "subCategories": [
+        "Vet",
+        "Pet Food",
+        "Toys",
+        "Grooming"
+      ]
+    },
+    {
+      "id": "Gifts",
+      "name": "Gifts & Charity",
+      "icon": "Gift",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Birthday",
+        "Holiday",
+        "Wedding",
+        "Charity",
+        "Donations"
+      ]
+    },
+    {
+      "id": "Maintenance",
+      "name": "Home Maintenance",
+      "icon": "Hammer",
+      "types": [
+        "EXPENSE",
+        "FIXED_EXPENSE"
+      ],
+      "subCategories": [
+        "Repairs",
+        "Renovation",
+        "Cleaning",
+        "Gardening",
+        "Tools"
+      ]
+    },
+    {
+      "id": "Savings",
+      "name": "General Savings",
+      "icon": "PiggyBank",
+      "types": [
+        "SAVING"
+      ],
+      "subCategories": [
+        "Emergency Fund",
+        "Rainy Day",
+        "Opportunity Fund"
+      ]
+    },
+    {
+      "id": "Investments",
+      "name": "Investments",
+      "icon": "TrendingUp",
+      "types": [
+        "SAVING"
+      ],
+      "subCategories": [
+        "Stocks",
+        "ETFs",
+        "Crypto",
+        "Real Estate",
+        "Bonds",
+        "Retirement"
+      ]
+    },
+    {
+      "id": "GoalSavings",
+      "name": "Specific Goals",
+      "icon": "TargetIcon",
+      "types": [
+        "SAVING"
+      ],
+      "subCategories": [
+        "Vacation Fund",
+        "Car Fund",
+        "Home Downpayment",
+        "Gadgets"
+      ]
+    },
+    {
+      "id": "Other",
+      "name": "Other",
+      "icon": "MoreHorizontal",
+      "types": [
+        "INCOME",
+        "EXPENSE",
+        "FIXED_EXPENSE",
+        "SAVING"
+      ]
+    },
+    {
+      "id": "custom-1771061161628",
+      "name": "Vault - Vacations",
+      "icon": "Briefcase",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061184577",
+      "name": "Vault - Investment",
+      "icon": "CircleDollarSign",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061208806",
+      "name": "Vault - Car payments",
+      "icon": "Bus",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061228680",
+      "name": "Vault - Pay Yourself First",
+      "icon": "PiggyBank",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061238424",
+      "name": "Vault - Taxes",
+      "icon": "Landmark",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771061253355",
+      "name": "Vault - Car service",
+      "icon": "Bus",
+      "types": [
+        "EXPENSE",
+        "SAVING"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771072253793",
+      "name": "Trading 212",
+      "icon": "Banknote",
+      "types": [
+        "EXPENSE"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771078168314",
+      "name": "Home Internet",
+      "icon": "Wifi",
+      "types": [
+        "EXPENSE"
+      ],
+      "isCustom": true
+    },
+    {
+      "id": "custom-1771078177221",
+      "name": "Phone",
+      "icon": "Smartphone",
+      "types": [
+        "EXPENSE"
+      ],
+      "isCustom": true
+    }
+  ]
+}
