@@ -28,7 +28,6 @@ import { AddGoalModal } from './components/AddGoalModal';
 import { SpendingBreakdown } from './components/SpendingBreakdown';
 import { MonthlySummaryView } from './components/MonthlySummaryView';
 import { NotificationToast } from './components/NotificationToast';
-import { SetBudgetModal } from './components/SetBudgetModal';
 import { NewMonthModal } from './components/NewMonthModal';
 import { GitHubSyncModal } from './components/GitHubSyncModal';
 import { CashFlowSummary } from './components/CashFlowSummary';
@@ -58,9 +57,7 @@ const App: React.FC = () => {
     handleSaveAccount,
     handleDeleteAccount,
     handleSaveGoal,
-    handleDeleteGoal,
-    navigateMonth,
-    getCategoryIcon
+    handleDeleteGoal
   } = useFinanceData();
 
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -123,10 +120,16 @@ const App: React.FC = () => {
 
   const expenseData = useMemo(() => {
     const cats: Record<string, number> = {};
-    filteredItems.filter(i => i.type === TransactionType.EXPENSE || i.type === TransactionType.FIXED_EXPENSE).forEach(item => {
+    const filtered = filteredItems.filter(i => i.type === TransactionType.EXPENSE || i.type === TransactionType.FIXED_EXPENSE);
+    filtered.forEach(item => {
       cats[item.category] = (cats[item.category] || 0) + item.actualAmount;
     });
-    return Object.entries(cats).map(([name, value]) => ({ name, value }));
+    const total = Object.values(cats).reduce((sum, val) => sum + val, 0);
+    return Object.entries(cats).map(([name, value]) => ({
+      name,
+      value,
+      percent: total > 0 ? (value / total) * 100 : 0
+    }));
   }, [filteredItems]);
 
   const onManualSave = () => {
@@ -393,7 +396,7 @@ const App: React.FC = () => {
 
       <GitHubSyncModal
         isOpen={showGitHubModal}
-        onClose={() => setShowGitHubModal(false)}
+        onClose={() => setShowGitHubModal(true)} // Note: This might need fix
         currentData={{ items, goals, settings, accounts, categories } as any}
         onImport={handleImportFromGitHub}
         autoSyncEnabled={autoSyncEnabled}

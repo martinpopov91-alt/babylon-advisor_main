@@ -120,7 +120,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   };
 
   const formatDate = (dateStr: string) => {
-    const options: React.HTMLAttributes<HTMLSpanElement> = {};
     const d = new Date(dateStr);
     return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
   };
