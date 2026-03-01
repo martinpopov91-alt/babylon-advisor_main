@@ -66,7 +66,6 @@ const App: React.FC = () => {
     (!localStorage.getItem('wealthflow_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
   );
 
-  const [showKeySelection, setShowKeySelection] = useState(false);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showCategoryManager, setShowCategoryManager] = useState(false);
   const [showNewMonthModal, setShowNewMonthModal] = useState(false);
@@ -195,7 +194,7 @@ const App: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         hasApiKey={hasApiKey}
-        onOpenKeySelection={() => setShowKeySelection(true)}
+        onOpenKeySelection={() => { }}
         onOpenCategoryManager={() => setShowCategoryManager(true)}
         autoSyncEnabled={autoSyncEnabled}
         syncStatus={syncStatus}
@@ -251,36 +250,62 @@ const App: React.FC = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2 space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Left Column - Main Analytics */}
+                  <div className="lg:col-span-8 space-y-8">
                     <SpendingBreakdown
                       data={expenseData}
                       symbol={currentCurrency.symbol}
                       isDarkMode={isDarkMode}
                       categories={categories}
                     />
-                    <TransactionsTable
-                      title="Recent Activity"
-                      items={filteredItems.slice(0, 5)}
-                      symbol={currentCurrency.symbol}
-                      onEdit={(item: BudgetItem) => { setEditingItem(item); setShowTransactionModal(true); }}
-                      onDelete={handleDeleteTransaction}
-                      onBulkDelete={() => { }}
-                      accounts={accounts}
-                      categories={categories}
-                    />
+
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Recent Activity</h3>
+                        <button
+                          onClick={() => setActiveTab('transactions')}
+                          className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                        >
+                          View All
+                        </button>
+                      </div>
+                      <TransactionsTable
+                        title="Recent Activity"
+                        items={filteredItems.slice(0, 10)}
+                        symbol={currentCurrency.symbol}
+                        onEdit={(item: BudgetItem) => { setEditingItem(item); setShowTransactionModal(true); }}
+                        onDelete={handleDeleteTransaction}
+                        onBulkDelete={() => { }}
+                        accounts={accounts}
+                        categories={categories}
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-6">
+
+                  {/* Right Column - Secondary Data */}
+                  <div className="lg:col-span-4 space-y-8">
                     <CashFlowSummary summary={summary} symbol={currentCurrency.symbol} />
-                    <SavingsGoalsView
-                      goals={goals}
-                      items={items}
-                      symbol={currentCurrency.symbol}
-                      onAddGoal={() => setShowGoalModal(true)}
-                      onEditGoal={(g) => { setEditingGoal(g); setShowGoalModal(true); }}
-                      onDeleteGoal={handleDeleteGoal}
-                      onAddSavings={() => setShowTransactionModal(true)}
-                    />
+
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 shadow-sm">
+                      <SavingsGoalsView
+                        goals={goals.slice(0, 3)}
+                        items={items}
+                        symbol={currentCurrency.symbol}
+                        onAddGoal={() => setShowGoalModal(true)}
+                        onEditGoal={(g) => { setEditingGoal(g); setShowGoalModal(true); }}
+                        onDeleteGoal={handleDeleteGoal}
+                        onAddSavings={() => setShowTransactionModal(true)}
+                      />
+                      {goals.length > 3 && (
+                        <button
+                          onClick={() => setActiveTab('goals')}
+                          className="w-full mt-4 py-2 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors"
+                        >
+                          View {goals.length - 3} more goals
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -326,7 +351,7 @@ const App: React.FC = () => {
               <AIAdvisor
                 data={filteredItems}
                 summary={summary}
-                onKeyRequest={() => setShowKeySelection(true)}
+                onKeyRequest={() => { }}
               />
             )}
 
@@ -396,7 +421,7 @@ const App: React.FC = () => {
 
       <GitHubSyncModal
         isOpen={showGitHubModal}
-        onClose={() => setShowGitHubModal(true)} // Note: This might need fix
+        onClose={() => setShowGitHubModal(false)}
         currentData={{ items, goals, settings, accounts, categories } as any}
         onImport={handleImportFromGitHub}
         autoSyncEnabled={autoSyncEnabled}

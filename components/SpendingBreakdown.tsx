@@ -38,81 +38,88 @@ export const SpendingBreakdown: React.FC<SpendingBreakdownProps> = ({ data, symb
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors flex flex-col">
+    <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors flex flex-col h-full">
       <div className="flex justify-between items-center mb-6">
         <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">Spending Breakdown</h3>
       </div>
 
-      <div className="relative h-[200px] w-full mb-6">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={65}
-              outerRadius={85}
-              paddingAngle={5}
-              dataKey="value"
-              stroke="none"
-            >
-              {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: isDarkMode ? '#0f172a' : '#ffffff',
-                borderRadius: '8px',
-                border: 'none',
-                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                fontSize: '12px'
-              }}
-              itemStyle={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}
-              formatter={(value: number) => `${symbol}${value.toLocaleString()}`}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-        
-        {/* Central Label */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total</p>
-          <p className="text-lg font-bold text-slate-800 dark:text-slate-100">
-            {symbol}{total.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-          </p>
-        </div>
-      </div>
-
-      {/* Detailed Legend List */}
-      <div className="space-y-3 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
-        {data.length > 0 ? data.map((item, index) => (
-          <div key={item.name} className="flex items-center justify-between group">
-            <div className="flex items-center gap-3">
-              <div 
-                className="w-2.5 h-2.5 rounded-full flex-shrink-0" 
-                style={{ backgroundColor: COLORS[index % COLORS.length] }} 
+      <div className="flex flex-col md:flex-row items-center gap-8 flex-1 overflow-hidden">
+        <div className="relative h-[220px] w-[220px] lg:h-[260px] lg:w-[260px] flex-shrink-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius="65%"
+                outerRadius="85%"
+                paddingAngle={4}
+                dataKey="value"
+                stroke="none"
+              >
+                {data.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: isDarkMode ? '#0f172a' : '#ffffff',
+                  borderRadius: '12px',
+                  border: 'none',
+                  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                  fontSize: '12px'
+                }}
+                itemStyle={{ color: isDarkMode ? '#f1f5f9' : '#1e293b' }}
+                formatter={(value: number) => `${symbol}${value.toLocaleString()}`}
               />
-              <div className="flex items-center gap-2">
-                <span className="text-slate-400 dark:text-slate-500">{getCategoryIcon(item.name)}</span>
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate max-w-[120px]">
-                  {item.name}
-                </span>
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* Central Label */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Total Spent</p>
+            <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+              {symbol}{total.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            </p>
+          </div>
+        </div>
+
+        {/* Detailed Legend List */}
+        <div className="flex-1 w-full space-y-3.5 overflow-y-auto max-h-[300px] md:max-h-full pr-2 custom-scrollbar">
+          {data.length > 0 ? data.map((item, index) => (
+            <div key={item.name} className="flex items-center justify-between group py-1 border-b border-transparent hover:border-slate-100 dark:hover:border-slate-800 transition-colors">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-3 h-3 rounded-md flex-shrink-0 shadow-sm"
+                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                />
+                <div className="flex items-center gap-2.5">
+                  <span className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-500 transition-colors">{getCategoryIcon(item.name)}</span>
+                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate max-w-[140px]">
+                    {item.name}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-black text-slate-900 dark:text-slate-100">
+                  {symbol}{item.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </p>
+                <div className="flex items-center justify-end gap-1.5">
+                  <div className="w-12 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full" style={{ width: `${item.percent}%`, backgroundColor: COLORS[index % COLORS.length] }} />
+                  </div>
+                  <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 w-8">
+                    {item.percent.toFixed(0)}%
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">
-                {symbol}{item.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-              </p>
-              <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                {item.percent.toFixed(1)}%
-              </p>
+          )) : (
+            <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 text-sm italic">
+              No expenses tracked yet
             </div>
-          </div>
-        )) : (
-          <div className="text-center py-4 text-slate-400 dark:text-slate-600 text-sm italic">
-            No expenses tracked yet
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
