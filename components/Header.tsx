@@ -23,17 +23,20 @@ export const Header: React.FC<HeaderProps> = ({
     const title = activeTab === 'summary' ? 'Summary' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1);
 
     return (
-        <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center transition-all glass-nav sticky top-0 z-50">
-            <div className="flex items-center gap-3">
-                <div className="md:hidden text-indigo-600 dark:text-indigo-400">
+        <header className="shrink-0 flex items-center justify-between gap-4 py-4 px-4 md:px-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-40">
+            <div className="flex items-center gap-3 min-w-0">
+                <div className="md:hidden text-indigo-500 shrink-0">
                     <Logo className="h-6 w-6" variant={1} />
                 </div>
-                <h1 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100 font-outfit truncate max-w-[180px] sm:max-w-none">
+                <h1
+                    className="text-xl md:text-2xl font-bold font-outfit truncate max-w-[180px] sm:max-w-none tracking-tight"
+                    style={{ color: 'var(--text-primary)' }}
+                >
                     {title}
                 </h1>
             </div>
 
-            <div className="flex items-center gap-2 md:gap-6">
+            <div className="flex items-center gap-2 md:gap-6 shrink-0">
                 <button
                     onClick={onOpenMobileMenu}
                     className="md:hidden p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
@@ -43,12 +46,13 @@ export const Header: React.FC<HeaderProps> = ({
 
                 <button
                     onClick={onAddTransaction}
-                    className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-200 dark:shadow-none text-sm hover-scale"
+                    className="shrink-0 flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-slate-950 px-4 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 dark:shadow-none text-sm hover-scale"
                 >
-                    <Plus size={18} /> <span className="hidden sm:inline">Add Transaction</span>
+                    <Plus size={18} />
+                    <span className="hidden sm:inline whitespace-nowrap">Add Transaction</span>
                 </button>
 
-                <div className="text-right hidden md:block pl-6 border-l border-slate-200 dark:border-slate-800">
+                <div className="shrink-0 text-right hidden md:block pl-6 border-l border-slate-200 dark:border-slate-800">
                     <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-0.5">Left to Spend</p>
                     <div className="flex items-center gap-2">
                         <p className="text-xl font-bold text-emerald-600 dark:text-emerald-400 font-outfit">

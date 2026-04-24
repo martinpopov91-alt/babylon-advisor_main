@@ -1,27 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Color Palette - Premium Dark Mode Theme */
-  --bg-primary: #020617;
-  --bg-secondary: #0f172a;
-  --accent-primary: #6366f1; /* Indigo-500 */
-  --accent-secondary: #8b5cf6; /* Violet-500 */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --glass-bg: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --success: #10b981;
-  --danger: #ef4444;
-  --warning: #f59e0b;
+  /* Flat UI Light Theme (Default) */
+  --bg-primary: #ecf0f1;
+  --bg-secondary: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(44, 62, 80, 0.1);
+  --success: #2ecc71;
+  --danger: #e74c3c;
+  --warning: #f1c40f;
 }
 
-.light {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.1);
+.dark {
+  /* Flat UI Dark Theme */
+  --bg-primary: #1a252f;
+  --bg-secondary: #2c3e50;
+  --text-primary: #FFFFFF;
+  --text-secondary: #bdc3c7;
+  --glass-bg: rgba(44, 62, 80, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.05);
 }
 
 body {
@@ -34,7 +33,12 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Outfit', sans-serif;
 }
 
@@ -65,8 +69,15 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {

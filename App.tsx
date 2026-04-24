@@ -81,6 +81,7 @@ const App: React.FC = () => {
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
   const [autoSyncEnabled, setAutoSyncEnabled] = useState(() => localStorage.getItem('wealthflow_autosync') === 'true');
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [toastConfig, setToastConfig] = useState<{ isVisible: boolean, message: string }>({ isVisible: false, message: '' });
 
   const showToast = (message: string) => {
@@ -210,7 +211,7 @@ const App: React.FC = () => {
       <div className="flex flex-col flex-1 overflow-hidden">
         <Header
           activeTab={activeTab}
-          onOpenMobileMenu={() => { }} // Integration needed
+          onOpenMobileMenu={() => setIsSidebarOpen(true)}
           onAddTransaction={() => setShowTransactionModal(true)}
           currentCurrency={currentCurrency}
           summary={summary}
@@ -218,7 +219,7 @@ const App: React.FC = () => {
         />
 
         <main className="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8">
-          <div className="max-w-7xl mx-auto space-y-6">
+          <div className="w-full space-y-6">
             {activeTab === 'dashboard' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
