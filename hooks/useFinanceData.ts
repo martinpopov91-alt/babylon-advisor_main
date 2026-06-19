@@ -22,18 +22,27 @@ const safeParse = <T,>(key: string, fallback: T): T => {
 };
 
 export const useFinanceData = () => {
-    const [items, setItems] = useState<BudgetItem[]>(() =>
-        safeParse('wealthflow_items', INITIAL_DATA)
-    );
+    const [items, setItems] = useState<BudgetItem[]>(() => {
+        const data = safeParse('wealthflow_items', INITIAL_DATA);
+        console.log("[FinanceData] Initial items loaded:", data.length);
+        return data;
+    });
     const [goals, setGoals] = useState<SavingsGoal[]>(() =>
         safeParse('wealthflow_goals', INITIAL_GOALS)
     );
     const [accounts, setAccounts] = useState<Account[]>(() =>
         safeParse('wealthflow_accounts', INITIAL_ACCOUNTS)
     );
-    const [categories, setCategories] = useState<Category[]>(() =>
-        safeParse('wealthflow_categories', DEFAULT_CATEGORIES)
-    );
+    const [categories, setCategories] = useState<Category[]>(() => {
+        const saved = safeParse('wealthflow_categories', DEFAULT_CATEGORIES);
+        // Emergency Restore for Utilities if missing
+        const hasUtilities = saved.some(c => c.id === 'Utilities' || c.name === 'Utilities');
+        if (!hasUtilities) {
+            const utils = DEFAULT_CATEGORIES.find(c => c.id === 'Utilities');
+            if (utils) return [...saved, utils];
+        }
+        return saved;
+    });
     const [settings, setSettings] = useState<AppSettings>(() => {
         const persisted = safeParse<Partial<AppSettings>>('wealthflow_settings', {});
         const now = new Date();
@@ -48,6 +57,7 @@ export const useFinanceData = () => {
 
     // Persistence
     useEffect(() => {
+        console.log("[FinanceData] Saving items to localStorage:", items.length);
         localStorage.setItem('wealthflow_items', JSON.stringify(items));
     }, [items]);
 
@@ -67,10 +77,11 @@ export const useFinanceData = () => {
         localStorage.setItem('wealthflow_settings', JSON.stringify(settings));
     }, [settings]);
 
-    // Derived Values
+    // Derived Values (Date range disabled as per user request to see all data)
     const filteredItems = useMemo(() => {
-        return items.filter(item => item.date >= settings.startDate && item.date <= settings.endDate);
-    }, [items, settings.startDate, settings.endDate]);
+        console.log(`[FinanceData] Displaying ALL items: ${items.length}`);
+        return items;
+    }, [items]);
 
     const summary = useMemo<SummaryData>(() => {
         const income = filteredItems
@@ -98,12 +109,20 @@ export const useFinanceData = () => {
 
     // Handlers
     const handleSaveTransaction = (itemData: Omit<BudgetItem, 'id'>, id?: string) => {
-        if (id) {
-            setItems((prev: BudgetItem[]) => prev.map((item: BudgetItem) => item.id === id ? { ...itemData, id } : item));
-        } else {
-            const newId = `man-${Date.now()}`;
-            setItems((prev: BudgetItem[]) => [{ ...itemData, id: newId }, ...prev]);
-        }
+        setItems((prev: BudgetItem[]) => {
+            let newItems;
+            if (id) {
+                // Update existing
+                newItems = prev.map((item: BudgetItem) => item.id === id ? { ...itemData, id } : item);
+            } else {
+                // Add new
+                const newId = `man-${Date.now()}`;
+                newItems = [{ ...itemData, id: newId }, ...prev];
+            }
+            console.log(`[FinanceData] Transaction ${id ? 'updated' : 'added'}. Total items: ${newItems.length}`);
+            // Optional: Sort by date descending to ensure newest are always visible
+            return [...newItems].sort((a, b) => b.date.localeCompare(a.date));
+        });
     };
 
     const handleDeleteTransaction = (id: string) => {

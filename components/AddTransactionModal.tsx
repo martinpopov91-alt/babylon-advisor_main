@@ -6,7 +6,7 @@ interface AddTransactionModalProps {
   isOpen: boolean;
   symbol: string;
   onClose: () => void;
-  onSave: (item: Omit<BudgetItem, 'id'>) => void;
+  onSave: (item: Omit<BudgetItem, 'id'>, id?: string) => void;
   initialData?: BudgetItem | null;
   defaultCategory?: string;
   defaultType?: TransactionType;
@@ -114,7 +114,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       } : undefined,
       accountId: accountId || undefined,
       toAccountId: type === TransactionType.TRANSFER ? (toAccountId || undefined) : undefined
-    });
+    }, initialData?.id);
     onClose();
   };
 

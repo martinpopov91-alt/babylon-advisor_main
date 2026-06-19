@@ -1,7 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { Repeat, Filter, Trash2, Tag, CheckSquare, Square, X, Wallet, MoreHorizontal, ChevronRight, Download, Edit3, Wand2 } from 'lucide-react';
-import { BudgetItem, TransactionType, Account, Category } from '../types.ts';
-import { CATEGORY_ICONS_MAP } from '../constants.ts';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { Repeat, Filter, Trash2, Tag, CheckSquare, Square, Download, Edit3, Wand2, MoreHorizontal } from 'lucide-react';
+import { BudgetItem, TransactionType, Account, Category } from '../types';
+import { CATEGORY_ICONS_MAP } from '../constants';
+import { parseBankCSV, autoCategorizeTransactions } from '../utils/csvImporter';
+import { Loader2, Check, AlertCircle } from 'lucide-react';
 
 interface TransactionsTableProps {
   items: BudgetItem[];
@@ -11,9 +13,10 @@ interface TransactionsTableProps {
   onDelete: (id: string) => void;
   onBulkDelete?: (ids: string[]) => void;
   className?: string;
-
-  accounts: Account[]; // To resolve account names
+  accounts: Account[];
   categories: Category[];
+  onAddMultipleTransactions?: (items: BudgetItem[]) => void;
+  hasApiKey?: boolean;
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -25,11 +28,61 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
   onBulkDelete,
   className,
   accounts,
-  categories
+  categories,
+  onAddMultipleTransactions,
+  hasApiKey
 }) => {
   const [typeFilter, setTypeFilter] = useState<TransactionType | 'ALL'>('ALL');
   const [categoryFilter, setCategoryFilter] = useState<string | 'ALL'>('ALL');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  // --- IMPORT LOGIC ---
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewItems, setPreviewItems] = useState<BudgetItem[] | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const text = e.target?.result as string;
+      const newItems = parseBankCSV(text, accounts[0]?.id || "default", file.name);
+
+      if (newItems && newItems.length > 0) {
+        setPreviewItems(newItems);
+      } else {
+        alert("No valid transactions found or file format is incorrect.");
+      }
+
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+    reader.readAsText(file);
+  };
+
+  const handleConfirmImport = async () => {
+    if (!previewItems || !onAddMultipleTransactions) return;
+
+    const apiKey = localStorage.getItem('wealthflow_ai_key');
+    if (apiKey && previewItems.length > 0) {
+      setIsImporting(true);
+      try {
+        const catNames = categories.map(c => c.name);
+        const categorized = await autoCategorizeTransactions(previewItems, catNames, apiKey);
+        onAddMultipleTransactions(categorized);
+      } catch (err) {
+        console.error("AI categorization failed", err);
+        onAddMultipleTransactions(previewItems);
+      } finally {
+        setIsImporting(false);
+      }
+    } else {
+      onAddMultipleTransactions(previewItems);
+    }
+    setPreviewItems(null);
+  };
+  // --------------------
 
   useEffect(() => {
     setSelectedIds(new Set());
@@ -62,10 +115,9 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
       }
       groups[date].items.push(item);
 
-      // Calculate daily total (Expenses as negative, Income as positive)
       if (item.type === TransactionType.INCOME) {
         groups[date].total += item.actualAmount;
-      } else if (item.type !== TransactionType.TRANSFER) { // transfers don't change net wealth usually in daily view
+      } else if (item.type !== TransactionType.TRANSFER) {
         groups[date].total -= item.actualAmount;
       }
     });
@@ -81,7 +133,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
 
   const getCategoryIcon = (categoryName: string) => {
     const cat = categories.find(c => c.name === categoryName);
-    const IconComponent = cat ? CATEGORY_ICONS_MAP[cat.icon] : MoreHorizontal;
+    const IconComponent = cat ? CATEGORY_ICONS_MAP[cat.icon as keyof typeof CATEGORY_ICONS_MAP] : MoreHorizontal;
     return IconComponent ? <IconComponent size={14} /> : <MoreHorizontal size={14} />;
   };
 
@@ -119,9 +171,19 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     return '';
   };
 
+  const getWeekNumber = (date: Date) => {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  };
+
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
-    return d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    const dateFormatted = d.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    const weekNum = getWeekNumber(d);
+    return `${dateFormatted} (Week ${weekNum})`;
   };
 
   const toggleSelectAll = () => {
@@ -146,7 +208,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
 
   return (
     <div className={`flex flex-col h-full bg-slate-50/50 dark:bg-slate-950/20 rounded-2xl overflow-hidden border border-slate-200/60 dark:border-slate-800/60 ${className}`}>
-      {/* Top Header / Context Bar */}
       <div className="px-6 py-4 bg-white dark:bg-slate-900/50 border-b border-slate-200/60 dark:border-slate-800/60 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="flex flex-col">
@@ -172,6 +233,21 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+
+          <input
+            type="file"
+            accept=".csv"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleFileUpload}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400 text-[11px] font-bold hover:bg-indigo-100 transition-colors border border-indigo-100 dark:border-indigo-900/40"
+          >
+            <Download size={13} className="rotate-180" /> Import CSV
+          </button>
+
           {selectedIds.size > 0 && (
             <div className="flex items-center gap-2 animate-in zoom-in-95 duration-200">
               <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
@@ -186,9 +262,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
               >
                 <Trash2 size={13} /> Delete
               </button>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[11px] font-bold text-slate-400 dark:text-slate-500 cursor-not-allowed">
-                <Wand2 size={13} /> Solve Duplicities
-              </button>
             </div>
           )}
 
@@ -202,7 +275,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         </div>
       </div>
 
-      {/* Filter Bar (Simplified) */}
       <div className="px-6 py-2 bg-slate-50 group-hover:bg-slate-100 dark:bg-slate-900/30 flex items-center gap-4 border-b border-slate-200/40 dark:border-slate-800/40">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -230,7 +302,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         </div>
       </div>
 
-      {/* Grouped List Content */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {groupedItems.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-12 text-slate-400 dark:text-slate-600 bg-white dark:bg-slate-900/20">
@@ -240,7 +311,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
         ) : (
           groupedItems.map((group) => (
             <div key={group.date} className="flex flex-col">
-              {/* Date Group Header */}
               <div className="sticky top-0 z-10 px-6 py-2.5 bg-slate-100 dark:bg-slate-800/80 backdrop-blur-md flex items-center justify-between border-b border-slate-200/40 dark:border-slate-800/40">
                 <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
                   {formatDate(group.date)}
@@ -250,7 +320,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                 </span>
               </div>
 
-              {/* Transactions in Group */}
               <div className="divide-y divide-slate-100 dark:divide-slate-800/40 bg-white dark:bg-slate-900/40">
                 {group.items.map((item) => {
                   const isSelected = selectedIds.has(item.id);
@@ -267,7 +336,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                       className={`group flex items-center px-6 py-4 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-all cursor-pointer ${isSelected ? 'bg-indigo-50/40 dark:bg-indigo-900/10' : ''}`}
                     >
                       <div className="flex items-center gap-4 flex-1 min-w-0">
-                        {/* Selector */}
                         <div className="flex-shrink-0 flex items-center">
                           <button
                             onClick={(e) => { e.stopPropagation(); toggleSelectRow(item.id); }}
@@ -277,12 +345,10 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                           </button>
                         </div>
 
-                        {/* Category Icon */}
                         <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:bg-white dark:group-hover:bg-slate-700 transition-colors shadow-sm border border-slate-200/20 dark:border-slate-700/20">
                           {getCategoryIcon(item.category)}
                         </div>
 
-                        {/* Content */}
                         <div className="flex-1 min-w-0 pr-4">
                           <div className="flex items-center gap-2 mb-0.5">
                             <h4 className="text-[13px] font-bold text-slate-800 dark:text-slate-100 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
@@ -306,7 +372,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         </div>
                       </div>
 
-                      {/* Right Side: Amount and Time */}
                       <div className="flex flex-col items-end gap-1 shrink-0">
                         <div className="flex items-center gap-2">
                           <span className={`text-[13px] font-bold ${getAmountColor(item)}`}>
@@ -318,7 +383,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         </span>
                       </div>
 
-                      {/* Quick Actions (Hover Only) */}
                       <div className="flex items-center gap-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={(e) => { e.stopPropagation(); onEdit(item); }}
@@ -341,6 +405,73 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
           ))
         )}
       </div>
+
+      {/* Import Preview Modal */}
+      {previewItems && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200/60 dark:border-slate-800/60 overflow-hidden flex flex-col max-h-[80vh]">
+            <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+              <div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Review Import</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">We found {previewItems.length} transactions in your file.</p>
+              </div>
+              <button
+                onClick={() => setPreviewItems(null)}
+                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+              >
+                <AlertCircle size={20} className="text-slate-400" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-3 custom-scrollbar">
+              {previewItems.map((item, idx) => (
+                <div key={idx} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/40">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 border border-slate-100 dark:border-slate-700">
+                      <Tag size={16} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">{item.name}</p>
+                      <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">{item.date}</p>
+                    </div>
+                  </div>
+                  <div className="text-right ml-4 shrink-0">
+                    <p className={`text-sm font-bold ${getAmountColor(item)}`}>
+                      {item.type === TransactionType.INCOME ? '+' : '-'}{symbol}{item.actualAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="px-8 py-6 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
+              <button
+                onClick={() => setPreviewItems(null)}
+                className="px-6 py-2.5 rounded-2xl text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmImport}
+                disabled={isImporting}
+                className="flex-1 max-w-[240px] flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 dark:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isImporting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    AI Categorizing...
+                  </>
+                ) : (
+                  <>
+                    <Check size={18} />
+                    Confirm Import
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

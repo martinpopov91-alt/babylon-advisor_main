@@ -1,6 +1,6 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, ChevronDown, ChevronRight } from 'lucide-react';
 import { Category } from '../types.ts';
 import { CATEGORY_ICONS_MAP } from '../constants.ts';
 
@@ -8,6 +8,7 @@ interface BreakdownItem {
   name: string;
   value: number;
   percent: number;
+  subCategories?: Record<string, number>;
 }
 
 interface SpendingBreakdownProps {
@@ -29,7 +30,15 @@ const COLORS = [
 ];
 
 export const SpendingBreakdown: React.FC<SpendingBreakdownProps> = ({ data, symbol, isDarkMode, categories }) => {
+  const [expandedCats, setExpandedCats] = React.useState<Set<string>>(new Set());
   const total = data.reduce((sum, item) => sum + item.value, 0);
+
+  const toggleCat = (name: string) => {
+    const next = new Set(expandedCats);
+    if (next.has(name)) next.delete(name);
+    else next.add(name);
+    setExpandedCats(next);
+  };
 
   const getCategoryIcon = (categoryName: string) => {
     const cat = categories.find(c => c.name === categoryName);
@@ -86,35 +95,66 @@ export const SpendingBreakdown: React.FC<SpendingBreakdownProps> = ({ data, symb
 
         {/* Detailed Legend List */}
         <div className="flex-1 w-full space-y-3.5 overflow-y-auto max-h-[300px] md:max-h-full pr-2 custom-scrollbar">
-          {data.length > 0 ? data.map((item, index) => (
-            <div key={item.name} className="flex items-center justify-between group py-1 border-b border-transparent hover:border-slate-100 dark:hover:border-slate-800 transition-colors">
-              <div className="flex items-center gap-3">
+          {data.length > 0 ? data.map((item, index) => {
+            const isExpanded = expandedCats.has(item.name);
+            const subEntries = item.subCategories ? Object.entries(item.subCategories).sort((a, b) => b[1] - a[1]) : [];
+            const hasSubs = subEntries.length > 0;
+
+            return (
+              <div key={item.name} className="space-y-1">
                 <div
-                  className="w-3 h-3 rounded-md flex-shrink-0 shadow-sm"
-                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                />
-                <div className="flex items-center gap-2.5">
-                  <span className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-500 transition-colors">{getCategoryIcon(item.name)}</span>
-                  <span className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate max-w-[140px]">
-                    {item.name}
-                  </span>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-black text-slate-900 dark:text-slate-100">
-                  {symbol}{item.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                </p>
-                <div className="flex items-center justify-end gap-1.5">
-                  <div className="w-12 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${item.percent}%`, backgroundColor: COLORS[index % COLORS.length] }} />
+                  onClick={() => hasSubs && toggleCat(item.name)}
+                  className={`flex items-center justify-between group p-2 rounded-xl transition-all cursor-pointer ${isExpanded ? 'bg-slate-50 dark:bg-slate-800' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="w-3 h-3 rounded-md flex-shrink-0 shadow-sm"
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    />
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-500 transition-colors shrink-0">
+                        {getCategoryIcon(item.name)}
+                      </span>
+                      <div className="flex flex-col min-w-0">
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate">
+                            {item.name}
+                          </span>
+                          {hasSubs && (
+                            isExpanded ? <ChevronDown size={12} className="text-slate-400" /> : <ChevronRight size={12} className="text-slate-400" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 w-8">
-                    {item.percent.toFixed(0)}%
-                  </p>
+                  <div className="text-right ml-4">
+                    <p className="text-sm font-black text-slate-900 dark:text-slate-100">
+                      {symbol}{item.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </p>
+                    <p className="text-[10px] font-black text-slate-400 dark:text-slate-500">
+                      {item.percent.toFixed(0)}%
+                    </p>
+                  </div>
                 </div>
+
+                {isExpanded && hasSubs && (
+                  <div className="pl-9 pr-2 pb-2 space-y-2 animate-in slide-in-from-top-1 duration-200">
+                    {subEntries.map(([subName, subValue]) => (
+                      <div key={subName} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">{subName}</span>
+                        </div>
+                        <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                          {symbol}{subValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          )) : (
+            );
+          }) : (
             <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 text-sm italic">
               No expenses tracked yet
             </div>

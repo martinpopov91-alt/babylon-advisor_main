@@ -37,13 +37,12 @@ import { CategoryManagerModal } from './components/CategoryManagerModal';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { MobileNav } from './components/MobileNav';
+import { MonthlyPlanView } from './components/MonthlyPlanView';
 
 // Hooks
 import { useFinanceData } from './hooks/useFinanceData';
 
 const App: React.FC = () => {
-  console.log("App Rendering...");
-
   const {
     items, setItems,
     goals, setGoals,
@@ -59,6 +58,8 @@ const App: React.FC = () => {
     handleSaveGoal,
     handleDeleteGoal
   } = useFinanceData();
+
+  console.log(`[App] Rendering with ${items.length} items (${filteredItems.length} filtered)`);
 
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isDarkMode, setIsDarkMode] = useState(() =>
@@ -106,7 +107,7 @@ const App: React.FC = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, []);
+  }, [isDarkMode]); // Fixed minor React dependency warning here
 
   const hasApiKey = !!localStorage.getItem('wealthflow_ai_key');
 
@@ -119,17 +120,28 @@ const App: React.FC = () => {
   }, [settings.endDate]);
 
   const expenseData = useMemo(() => {
-    const cats: Record<string, number> = {};
+    const cats: Record<string, { value: number, subs: Record<string, number> }> = {};
     const filtered = filteredItems.filter(i => i.type === TransactionType.EXPENSE || i.type === TransactionType.FIXED_EXPENSE);
+    
     filtered.forEach(item => {
-      cats[item.category] = (cats[item.category] || 0) + item.actualAmount;
+      const catName = item.category || 'Other';
+      if (!cats[catName]) {
+        cats[catName] = { value: 0, subs: {} };
+      }
+      cats[catName].value += item.actualAmount;
+      if (item.subCategory) {
+        cats[catName].subs[item.subCategory] = (cats[catName].subs[item.subCategory] || 0) + item.actualAmount;
+      }
     });
-    const total = Object.values(cats).reduce((sum, val) => sum + val, 0);
-    return Object.entries(cats).map(([name, value]) => ({
+
+    const total = Object.values(cats).reduce((sum, val) => sum + val.value, 0);
+    
+    return Object.entries(cats).map(([name, data]) => ({
       name,
-      value,
-      percent: total > 0 ? (value / total) * 100 : 0
-    }));
+      value: data.value,
+      percent: total > 0 ? (data.value / total) * 100 : 0,
+      subCategories: data.subs
+    })).sort((a, b) => b.value - a.value);
   }, [filteredItems]);
 
   const onManualSave = () => {
@@ -280,6 +292,12 @@ const App: React.FC = () => {
                         onBulkDelete={() => { }}
                         accounts={accounts}
                         categories={categories}
+                        hasApiKey={hasApiKey}
+                        // 👇 FIX 1: Connecting Dashboard import to state
+                        onAddMultipleTransactions={(newItems) => {
+                          setItems(prevItems => [...newItems, ...prevItems]);
+                          showToast(`Successfully imported ${newItems.length} transactions!`);
+                        }}
                       />
                     </div>
                   </div>
@@ -322,7 +340,13 @@ const App: React.FC = () => {
                 onBulkDelete={() => { }}
                 accounts={accounts}
                 categories={categories}
+                hasApiKey={hasApiKey}
                 className="h-full"
+                // 👇 FIX 2: Connecting Transactions Page import to state
+                onAddMultipleTransactions={(newItems) => {
+                  setItems(prevItems => [...newItems, ...prevItems]);
+                  showToast(`Successfully imported ${newItems.length} transactions!`);
+                }}
               />
             )}
 
@@ -336,6 +360,12 @@ const App: React.FC = () => {
                 onAddBudget={() => { }}
               />
             )}
+            {activeTab === 'monthly-plan' && (
+  <MonthlyPlanView 
+    items={filteredItems} 
+    symbol={currentCurrency.symbol} 
+  />
+)}
 
             {activeTab === 'accounts' && (
               <AccountsView
