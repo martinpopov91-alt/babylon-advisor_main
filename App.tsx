@@ -53,6 +53,7 @@ const App: React.FC = () => {
     summary,
     handleSaveTransaction,
     handleDeleteTransaction,
+    handleBulkDeleteTransactions,
     handleSaveAccount,
     handleDeleteAccount,
     handleSaveGoal,
@@ -289,7 +290,7 @@ const App: React.FC = () => {
                         symbol={currentCurrency.symbol}
                         onEdit={(item: BudgetItem) => { setEditingItem(item); setShowTransactionModal(true); }}
                         onDelete={handleDeleteTransaction}
-                        onBulkDelete={() => { }}
+                        onBulkDelete={handleBulkDeleteTransactions}
                         accounts={accounts}
                         categories={categories}
                         hasApiKey={hasApiKey}
@@ -337,7 +338,7 @@ const App: React.FC = () => {
                 symbol={currentCurrency.symbol}
                 onEdit={(item: BudgetItem) => { setEditingItem(item); setShowTransactionModal(true); }}
                 onDelete={handleDeleteTransaction}
-                onBulkDelete={() => { }}
+                onBulkDelete={handleBulkDeleteTransactions}
                 accounts={accounts}
                 categories={categories}
                 hasApiKey={hasApiKey}
@@ -421,6 +422,13 @@ const App: React.FC = () => {
         onClose={() => { setShowTransactionModal(false); setEditingItem(null); }}
         onSave={handleSaveTransaction}
         initialData={editingItem}
+        onDelete={() => {
+          if (editingItem) {
+            handleDeleteTransaction(editingItem.id);
+            setShowTransactionModal(false);
+            setEditingItem(null);
+          }
+        }}
         accounts={accounts}
         categories={categories}
       />
@@ -431,6 +439,13 @@ const App: React.FC = () => {
         onClose={() => { setShowGoalModal(false); setEditingGoal(null); }}
         onSave={handleSaveGoal}
         initialData={editingGoal}
+        onDelete={() => {
+          if (editingGoal) {
+            handleDeleteGoal(editingGoal.id);
+            setShowGoalModal(false);
+            setEditingGoal(null);
+          }
+        }}
         categories={categories}
       />
 

@@ -129,6 +129,10 @@ export const useFinanceData = () => {
         setItems((prev: BudgetItem[]) => prev.filter((item: BudgetItem) => item.id !== id));
     };
 
+    const handleBulkDeleteTransactions = (ids: string[]) => {
+        setItems((prev: BudgetItem[]) => prev.filter((item: BudgetItem) => !ids.includes(item.id)));
+    };
+
     const handleSaveAccount = (accountData: Omit<Account, 'id'>, id?: string) => {
         if (id) {
             setAccounts((prev: Account[]) => prev.map((a: Account) => a.id === id ? { ...accountData, id } : a));
@@ -181,6 +185,7 @@ export const useFinanceData = () => {
         summary,
         handleSaveTransaction,
         handleDeleteTransaction,
+        handleBulkDeleteTransactions,
         handleSaveAccount,
         handleDeleteAccount,
         handleSaveGoal,
